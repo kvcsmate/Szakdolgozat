@@ -3,3 +3,12 @@ html, body {
     height: 100%;
     margin: 0;
   }
+  div{
+    position:absolute;
+    transform:translate(-50%,-50%);
+    height:100px;
+    width:100px;
+    border-radius:50%;
+    border:2px solid white;
+    pointer-events: none
+  }

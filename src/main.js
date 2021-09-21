@@ -1,14 +1,17 @@
-const width=window.innerWidth;
-const tickrate = 100;
-const height = window.innerHeight;
+
 var c = document.getElementById("canvas");
-c.innerHTML = "Width: " + width + "<br>Height: " + height;
+let circle = document.getElementById('circle');
+//c.innerHTML = "Width: " + width + "<br>Height: " + height;
 var context = c.getContext("2d");
-context.canvas.style.width = 1800;
-context.canvas.style.height= 1000;
+const width=c.width;
+const tickrate = 100;
+const height = c.height;
+//context.canvas.style.width = 1800;
+//context.canvas.style.height= 1000;
 const density = 5000;
 const chaos = 10;
-const radius = 50;
+var radius = 50;
+
 
 
 
@@ -28,7 +31,20 @@ for(let i=0;i<density;i++)
 }
 
 var x,y;
+
+/*const onMouseMove = (e) =>{
+  circle.style.left = e.pageX + 'px';
+  circle.style.top = e.pageY + 'px';
+}
+document.addEventListener('mousemove', onMouseMove);*/
+
 function oMousePos(evt) {
+    circle.style.left = evt.pageX + 'px';
+    circle.style.top = evt.pageY + 'px';
+    circle.style.width =radius*2 + 'px';
+    circle.style.height = radius*2 + 'px';
+    //circle.style.width, circle.style.length = radius;
+    //console.log(circle.style.left);
     var ClientRect = canvas.getBoundingClientRect();
     x = Math.round(evt.clientX - ClientRect.left);
     y = Math.round(evt.clientY - ClientRect.top);
@@ -53,7 +69,7 @@ function oMousePos(evt) {
             let val = (element.x - x)*(element.x - x) + (element.y - y)*(element.y - y); 
             if( val < radius*radius) // benne van e a körben
             {
-              console.log(val); // ha igen, írja ki mennyi ez, és mennyi a rádiusz
+              //console.log(val); // ha igen, írja ki mennyi ez, és mennyi a rádiusz
                 element.value+=10
                 element.render(voronoi,context)
             };
@@ -90,3 +106,19 @@ function oMousePos(evt) {
    return (Math.random() - 0.5) * 2;
  } 
 
+ window.addEventListener("scroll",asd);
+ function asd(e)
+ {
+   console.log('lefutott');
+ }
+
+
+
+window.addEventListener("wheel", function(e){
+  radius = e.wheelDelta < 0 ? Math.min(radius+5,200) : Math.max(radius-5,10);
+   
+  circle.style.width =radius*2 + 'px';
+  circle.style.height = radius*2 + 'px';
+   //circle.setAttribute("style","height:500px");
+   console.log(radius);
+});
