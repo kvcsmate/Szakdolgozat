@@ -30,60 +30,16 @@ for(let i=0;i<density;i++)
     
 }
 
-var x,y;
-
 /*const onMouseMove = (e) =>{
   circle.style.left = e.pageX + 'px';
   circle.style.top = e.pageY + 'px';
 }
 document.addEventListener('mousemove', onMouseMove);*/
-
-function oMousePos(evt) {
-    circle.style.left = evt.pageX + 'px';
-    circle.style.top = evt.pageY + 'px';
-    circle.style.width =radius*2 + 'px';
-    circle.style.height = radius*2 + 'px';
-    //circle.style.width, circle.style.length = radius;
-    //console.log(circle.style.left);
-    var ClientRect = canvas.getBoundingClientRect();
-    x = Math.round(evt.clientX - ClientRect.left);
-    y = Math.round(evt.clientY - ClientRect.top);
-    
-    return {
-      x: Math.round(evt.clientX - ClientRect.left),
-      y: Math.round(evt.clientY - ClientRect.top)
-    }
-    
-  }
+	mouse = new Mouse(canvas,cells);
   
-  canvas.addEventListener("mousedown",handleMouseDown,true);
-  canvas.addEventListener("mousemove",oMousePos);
   
-  function handleMouseDown(e)
-{
-    
-    interval_ = setInterval(function()
-    { 
-        cells.forEach(element => {
-          
-            let val = (element.x - x)*(element.x - x) + (element.y - y)*(element.y - y); 
-            if( val < radius*radius) // benne van e a körben
-            {
-              //console.log(val); // ha igen, írja ki mennyi ez, és mennyi a rádiusz
-                element.value+=10
-                element.render(voronoi,context)
-            };
-        })
-    }, tickrate);;
- }
- 
- canvas.onmouseup =stopIncrement;
  
  
- function stopIncrement() {
-   clearInterval(interval_); 
- }
-
  function generatePointsByGrid()
  {
   pts= new Array();
@@ -105,20 +61,3 @@ function oMousePos(evt) {
    
    return (Math.random() - 0.5) * 2;
  } 
-
- window.addEventListener("scroll",asd);
- function asd(e)
- {
-   console.log('lefutott');
- }
-
-
-
-window.addEventListener("wheel", function(e){
-  radius = e.wheelDelta < 0 ? Math.min(radius+5,200) : Math.max(radius-5,10);
-   
-  circle.style.width =radius*2 + 'px';
-  circle.style.height = radius*2 + 'px';
-   //circle.setAttribute("style","height:500px");
-   console.log(radius);
-});
