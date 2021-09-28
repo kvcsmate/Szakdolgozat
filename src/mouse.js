@@ -1,12 +1,18 @@
 class Mouse
 {
-	
-	constructor(canvas,cellstoassign)
+	x;
+	y;
+	cells;
+	constructor(canvas,cellstoassign,x,y)
 	{
-		
-		this.x, this.y, this.interval_;
+		this.x = x;
+		this.y = y;
+		this.interval_;
 		this.tickrate = 100;
-		this.cells = cellstoassign.map((x)=>x);
+		this.cells = new Array();
+		cellstoassign.forEach(element => {
+			this.cells.push(element);
+		});
 		console.log(this.cells[10]);
 		canvas.addEventListener("mousedown",this.handleMouseDown);
 		canvas.addEventListener("mousemove",this.oMousePos);
@@ -23,8 +29,8 @@ class Mouse
 		circle.style.width =radius*2 + 'px';
 		circle.style.height = radius*2 + 'px';
 		var ClientRect = canvas.getBoundingClientRect();
-		this.x = Math.round(evt.clientX - ClientRect.left);
-		this.y = Math.round(evt.clientY - ClientRect.top);
+		x = Math.round(evt.clientX - ClientRect.left);
+		y = Math.round(evt.clientY - ClientRect.top);
 		
 		/*return 
 		{
@@ -42,15 +48,16 @@ class Mouse
 			
 			this.interval_ = setInterval(function()
 			{
-				console.log(this.cells);
-				this.cells.forEach(element => {
-				  
-					let val = (element.x - this.x)*(element.x - this.x) + (element.y - this.y)*(element.y - this.y); 
+				console.log(cells[1]);
+				cells.forEach(element => {
+					let val = (element.x - x)*(element.x - x) + (element.y - y)*(element.y - y); 
+					console.log(x);
 					if( val < radius*radius) // benne van e a körben
 					{
+						
 						console.log(val); // ha igen, írja ki mennyi ez, és mennyi a rádiusz
-						element.value+=10
-						element.render(voronoi,context)
+						element.value = Math.min(element.value+5,255);
+						element.render(voronoi,context);
 					};
 				})
 			}, this.tickrate);;
@@ -59,14 +66,15 @@ class Mouse
 		{
 			this.interval_ = setInterval(function()
 			{ 
-				this.cells.forEach(element => {
+					console.log("asd");
+					cells.forEach(element => {
 				  
-					let val = (element.x - this.x)*(element.x - this.x) + (element.y - this.y)*(element.y - this.y); 
+					let val = (element.x - x)*(element.x - x) + (element.y - y)*(element.y - y); 
 					if( val < radius*radius) // benne van e a körben
 					{
 					  //console.log(val); // ha igen, írja ki mennyi ez, és mennyi a rádiusz
-						element.value-=10
-						element.render(voronoi,context)
+						element.value= Math.max(0,element.value-1);
+						element.render(voronoi,context);
 					};
 				})
 			}, this.tickrate);;

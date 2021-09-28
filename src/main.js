@@ -12,7 +12,7 @@ const density = 5000;
 const chaos = 10;
 var radius = 50;
 
-
+var x,y;
 
 
 //const points =generatePointsByGrid();
@@ -26,16 +26,17 @@ for(let i=0;i<density;i++)
 {
     cell = new Cell(voronoi.cellPolygon(i),0,i,points[i])
     cells.push(cell);
-    cell.render(voronoi,context);
-    
 }
-
+cells.forEach(element => {
+  element.value=0;
+  element.render(voronoi,context)
+});
 /*const onMouseMove = (e) =>{
   circle.style.left = e.pageX + 'px';
   circle.style.top = e.pageY + 'px';
 }
 document.addEventListener('mousemove', onMouseMove);*/
-	mouse = new Mouse(canvas,cells);
+	mouse = new Mouse(canvas,cells,x,y);
   
   
  
