@@ -2,10 +2,10 @@ import globals from './globals.js';
 
 
 var mouse = {};
-var tickrate = 13;
 var interval;
-
-var MouseKey;
+var lastPressedMouseButton;
+var lastCircleX = 0;
+var lastCircleY = 0;
 
 const MOUSEKEY = {
 	NONE: 0,
@@ -14,83 +14,74 @@ const MOUSEKEY = {
 	MIDDLE: 2,
 }
 
-var SetMouse = function (cellstoassign) {
-	globals.cells = new Array();
-	cellstoassign.forEach(element => {
-		globals.cells.push(element);
-	});
+var SetMouseEvents = function () {
 	window.addEventListener("mousedown", mouseDown);
 	window.addEventListener("mousemove", oMousePos);
-
 	window.addEventListener("wheel", scroll);
 	window.addEventListener("mouseup", stopIncrement);
 	window.addEventListener("contextmenu", e => e.preventDefault());
-
 };
 
 
 var mouseDown = function (e) {
 	clearInterval(interval);
-	MouseKey = e.which;
-	interval = setInterval(handleMouseDown, tickrate)
+	lastPressedMouseButton = e.which;
+	interval = setInterval(handleMouseDown, globals.tickrate)
 }
+
 
 var handleMouseDown = function () {
-	if (MouseKey == MOUSEKEY.LEFT) {
-		globals.cells.forEach(element => {
-			let val = (element.x - globals.x) * (element.x - globals.x) + (element.y - globals.y) * (element.y - globals.y);
-			if (val < globals.circleRadiusradius * globals.circleRadiusradius) {
-				element.value = Math.min(element.value + 5, 255);
-				element.render(globals.voronoi, globals.context);
+	if (lastPressedMouseButton == MOUSEKEY.LEFT) {
+		globals.cells.forEach(cell => {
+			let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
+			if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
+				cell.value = Math.min(cell.value + 5, 255);
+				cell.render();
+			};
+		})
+	} else if (lastPressedMouseButton == MOUSEKEY.RIGHT) {
+		globals.cells.forEach(cell => {
+			let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
+			if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
+				cell.value = Math.max(cell.value - 1, 0);
+				cell.render();
 			};
 		})
 	}
-	else if (MouseKey == MOUSEKEY.RIGHT) {
-		globals.cells.forEach(element => {
-			let val = (element.x - globals.x) * (element.x - globals.x) + (element.y - globals.y) * (element.y - globals.y);
-			if (val < globals.circleRadiusradius * globals.circleRadiusradius) {
-
-				element.value = Math.max(element.value - 1, 0);
-				element.render(globals.voronoi, globals.context);
-			};
-		})
-	}
-
 }
 
-
-//ui
-var lastcircleX = 0;
-var lastcircleY = 0;
 
 var redrawCircle = function (evt) {
-	globals.context2.clearRect(lastcircleX - 2 * globals.circleRadiusradius - 2, lastcircleY - 2 * globals.circleRadiusradius - 2, 4 * globals.circleRadiusradius, 4 * globals.circleRadiusradius);
+	let offset = 2 * globals.circleRadius + 2;
+	let size = 4 * globals.circleRadius;
+
+	globals.context2.clearRect(lastCircleX - offset, lastCircleY - offset, size, size);
 	globals.context2.beginPath();
-	globals.context2.arc(evt.pageX, evt.pageY, globals.circleRadiusradius, 0, 2 * Math.PI);
+	globals.context2.arc(evt.pageX, evt.pageY, globals.circleRadius, 0, 2 * Math.PI);
 	globals.context2.stroke();
+
+	lastCircleX = evt.pageX
+	lastCircleY = evt.pageY
 }
+
 
 var oMousePos = function (evt) {
-
 	redrawCircle(evt)
-
-	lastcircleX = evt.pageX
-	lastcircleY = evt.pageY
-
-	globals.x = Math.round(evt.clientX);
-	globals.y = Math.round(evt.clientY);
-
+	globals.mouseX = Math.round(evt.clientX);
+	globals.mouseY = Math.round(evt.clientY);
 }
+
+
 var stopIncrement = function () {
 	clearInterval(interval);
 }
 
+
 var scroll = function (e) {
-	redrawCircle(e)
-	globals.circleRadiusradius = e.wheelDelta < 0 ? Math.min(globals.circleRadiusradius + 5, 200) : Math.max(globals.circleRadiusradius - 5, 10);
+	redrawCircle(e);
+	globals.circleRadius = e.wheelDelta < 0 ? Math.min(globals.circleRadius + 5, 200) : Math.max(globals.circleRadius - 5, 10);
 }
 
 
-
-mouse.SetMouse = SetMouse;
+mouse.SetMouseEvents = SetMouseEvents;
 export default mouse;
