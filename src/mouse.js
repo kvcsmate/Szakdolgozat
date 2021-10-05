@@ -1,103 +1,96 @@
-class Mouse
-{
-	x;
-	y;
-	cells;
-	constructor(canvas,cellstoassign,x,y)
-	{
-		this.x = x;
-		this.y = y;
-		this.interval_;
-		this.tickrate = 100;
-		this.cells = new Array();
-		cellstoassign.forEach(element => {
-			this.cells.push(element);
-		});
-		console.log(this.cells[10]);
-		canvas.addEventListener("mousedown",this.handleMouseDown);
-		canvas.addEventListener("mousemove",this.oMousePos);
-		window.addEventListener("wheel", this.scroll);
-		canvas.onmouseup =this.stopIncrement;
-		window.addEventListener("contextmenu",e=>e.preventDefault());
-		
-	}
-	
-	oMousePos(evt) 
-	{
-		circle.style.left = evt.pageX + 'px';
-		circle.style.top = evt.pageY + 'px';
-		circle.style.width =radius*2 + 'px';
-		circle.style.height = radius*2 + 'px';
-		var ClientRect = canvas.getBoundingClientRect();
-		x = Math.round(evt.clientX - ClientRect.left);
-		y = Math.round(evt.clientY - ClientRect.top);
-		
-		/*return 
-		{
-		  x: Math.round(evt.clientX - ClientRect.left),
-		  y: Math.round(evt.clientY - ClientRect.top)
-		}*/
-    
-	}
-	
-	handleMouseDown(e)
-	{
-		
-		if(e.which == 1)
-		{
-			
-			this.interval_ = setInterval(function()
-			{
-				console.log(cells[1]);
-				cells.forEach(element => {
-					let val = (element.x - x)*(element.x - x) + (element.y - y)*(element.y - y); 
-					console.log(x);
-					if( val < radius*radius) // benne van e a körben
-					{
-						
-						console.log(val); // ha igen, írja ki mennyi ez, és mennyi a rádiusz
-						element.value = Math.min(element.value+5,255);
-						element.render(voronoi,context);
-					};
-				})
-			}, this.tickrate);;
-		}
-		else if(e.which ==3)
-		{
-			this.interval_ = setInterval(function()
-			{ 
-					console.log("asd");
-					cells.forEach(element => {
-				  
-					let val = (element.x - x)*(element.x - x) + (element.y - y)*(element.y - y); 
-					if( val < radius*radius) // benne van e a körben
-					{
-					  //console.log(val); // ha igen, írja ki mennyi ez, és mennyi a rádiusz
-						element.value= Math.max(0,element.value-1);
-						element.render(voronoi,context);
-					};
-				})
-			}, this.tickrate);;
-		}
-		
-	}
-	
- 
- 
-	stopIncrement() 
-	{
-		clearInterval(this.interval_); 
-	}
-	
-	scroll(e)
-	{
-		radius = e.wheelDelta < 0 ? Math.min(radius+5,200) : Math.max(radius-5,10);
-		circle.style.width =radius*2 + 'px';
-		circle.style.height = radius*2 + 'px';
-		console.log(radius);
-	}
+import globals from './globals.js';
 
 
-	
-  
+var mouse = {};
+var tickrate = 13;
+var interval;
+
+var MouseKey;
+
+const MOUSEKEY = {
+	NONE: 0,
+	LEFT: 1,
+	RIGHT: 3,
+	MIDDLE: 2,
 }
+
+var SetMouse = function (cellstoassign) {
+	globals.cells = new Array();
+	cellstoassign.forEach(element => {
+		globals.cells.push(element);
+	});
+	window.addEventListener("mousedown", mouseDown);
+	window.addEventListener("mousemove", oMousePos);
+
+	window.addEventListener("wheel", scroll);
+	window.addEventListener("mouseup", stopIncrement);
+	window.addEventListener("contextmenu", e => e.preventDefault());
+
+};
+
+
+var mouseDown = function (e) {
+	clearInterval(interval);
+	MouseKey = e.which;
+	interval = setInterval(handleMouseDown, tickrate)
+}
+
+var handleMouseDown = function () {
+	if (MouseKey == MOUSEKEY.LEFT) {
+		globals.cells.forEach(element => {
+			let val = (element.x - globals.x) * (element.x - globals.x) + (element.y - globals.y) * (element.y - globals.y);
+			if (val < globals.circleRadiusradius * globals.circleRadiusradius) {
+				element.value = Math.min(element.value + 5, 255);
+				element.render(globals.voronoi, globals.context);
+			};
+		})
+	}
+	else if (MouseKey == MOUSEKEY.RIGHT) {
+		globals.cells.forEach(element => {
+			let val = (element.x - globals.x) * (element.x - globals.x) + (element.y - globals.y) * (element.y - globals.y);
+			if (val < globals.circleRadiusradius * globals.circleRadiusradius) {
+
+				element.value = Math.max(element.value - 1, 0);
+				element.render(globals.voronoi, globals.context);
+			};
+		})
+	}
+
+}
+
+
+//ui
+var lastcircleX = 0;
+var lastcircleY = 0;
+
+var redrawCircle = function (evt) {
+	globals.context2.clearRect(lastcircleX - 2 * globals.circleRadiusradius - 2, lastcircleY - 2 * globals.circleRadiusradius - 2, 4 * globals.circleRadiusradius, 4 * globals.circleRadiusradius);
+	globals.context2.beginPath();
+	globals.context2.arc(evt.pageX, evt.pageY, globals.circleRadiusradius, 0, 2 * Math.PI);
+	globals.context2.stroke();
+}
+
+var oMousePos = function (evt) {
+
+	redrawCircle(evt)
+
+	lastcircleX = evt.pageX
+	lastcircleY = evt.pageY
+
+	globals.x = Math.round(evt.clientX);
+	globals.y = Math.round(evt.clientY);
+
+}
+var stopIncrement = function () {
+	clearInterval(interval);
+}
+
+var scroll = function (e) {
+	redrawCircle(e)
+	globals.circleRadiusradius = e.wheelDelta < 0 ? Math.min(globals.circleRadiusradius + 5, 200) : Math.max(globals.circleRadiusradius - 5, 10);
+}
+
+
+
+mouse.SetMouse = SetMouse;
+export default mouse;

@@ -1,58 +1,53 @@
+import globals from './globals.js';
+var epsilon = 15;
 
-
-class Cell
-{
-    constructor(voronoi,value,id,point)
-    {
+export default class Cell {
+    constructor(voronoi, value, id, point) {
         this.id = id
         this.voronoi = voronoi;
         this.x = point[0];
         this.y = point[1];
         this.value = value;
+        this.isOnBorder = this.IsonBorder();
+
     }
-    render(voronoi,context)
-    {
+
+
+    render(voronoi, context) {
         context.fillStyle = this.heightColorbyGradient();
         //console.log(this.heightColorbyGradient())
         context.beginPath();
-        voronoi.renderCell(this.id,context)
+        voronoi.renderCell(this.id, context)
         //context.fillText(this.value,this.x,this.y);
         context.fill();
         //context.stroke();
     }
-    contains(voronoi,x,y)
-    {
-                return voronoi.contains(this.id,x,y);
+    contains(voronoi, x, y) {
+        return voronoi.contains(this.id, x, y);
     }
-    heightColorbyGradient()
-    {
-        if(this.value==0)
-        {
-            return 'rgb(0,105,148)' ;
+    heightColorbyGradient() {
+        if (this.value == 0) {
+            return 'rgb(0,105,148)';
         }
-        let colorindex=0;
-        let cval = this.value/2.25;
-        for(let i=0;i<gradient.length;++i)
-        {
-            if(Math.abs(cval-gradient[i][1])<Math.abs(cval-gradient[colorindex][1]))
-            {
+        let colorindex = 0;
+        let cval = this.value / 2.25;
+        for (let i = 0; i < gradient.length; ++i) {
+            if (Math.abs(cval - gradient[i][1]) < Math.abs(cval - gradient[colorindex][1])) {
                 colorindex = i;
             }
-            
+
         }
         return gradient[colorindex][0];
     }
-    
-    heightColor()
-    {
-        
-        let green,red,blue;
-        if(this.value==0)
-        {
-            return 'rgb(0,105,148)' ;
+
+    heightColor() {
+
+        let green, red, blue;
+        if (this.value == 0) {
+            return 'rgb(0,105,148)';
         }
         red = this.value;
-        green = 255 -red/10;
+        green = 255 - red / 10;
         blue = 0;
         /*
         
@@ -68,6 +63,12 @@ class Cell
              green = 1.0 - blue;
             }
             */
-            return 'rgb('+red+','+green+','+blue+')' ;
+        return 'rgb(' + red + ',' + green + ',' + blue + ')';
+    }
+
+
+    IsonBorder() {
+        return (this.x > globals.width - epsilon || this.x < epsilon || this.y < epsilon || this.y > globals.height - epsilon);
+
     }
 }
