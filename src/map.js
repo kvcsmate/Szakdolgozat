@@ -1,73 +1,59 @@
+import globals from './globals.js';
+import Cell from './cell.js';
+
+var map = {}; 
 
 
-class Cell
-{
-    constructor(voronoi,value,id,point)
-    {
-        this.id = id
-        this.voronoi = voronoi;
-        this.x = point[0];
-        this.y = point[1];
-        this.value = value;
+map.InitMap = function () {
+
+    let points = Array.from({ length: 5000 }, () => [Math.random() * globals.width, Math.random() * globals.height])
+    let delaunay = d3.Delaunay.from(points);
+    globals.voronoi = delaunay.voronoi([0, 0, globals.width, globals.height]);
+  
+    for (let i = 0; i < points.length; i++) {
+      let cell = new Cell(globals.voronoi.cellPolygon(i), 0, i, points[i])
+      globals.cells.push(cell);
     }
-    render(voronoi,context)
+  
+    //clear the lines
     {
-        context.fillStyle = this.heightColorbyGradient();
-        //console.log(this.heightColorbyGradient())
-        context.beginPath();
-        voronoi.renderCell(this.id,context)
-        //context.fillText(this.value,this.x,this.y);
-        context.fill();
-        //context.stroke();
+      globals.context.beginPath();
+      globals.context.rect(0, 0, globals.width, globals.height);
+      globals.context.fillStyle = globals.defaultColor;
+      globals.context.fill();
     }
-    contains(voronoi,x,y)
-    {
-                return voronoi.contains(this.id,x,y);
-    }
-    heightColorbyGradient()
-    {
-        if(this.value==0)
-        {
-            return 'rgb(0,105,148)' ;
-        }
-        let colorindex=0;
-        let cval = this.value/2.25;
-        for(let i=0;i<gradient.length;++i)
-        {
-            if(Math.abs(cval-gradient[i][1])<Math.abs(cval-gradient[colorindex][1]))
-            {
-                colorindex = i;
-            }
-            
-        }
-        return gradient[colorindex][0];
-    }
-    
-    heightColor()
-    {
-        
-        let green,red,blue;
-        if(this.value==0)
-        {
-            return 'rgb(0,105,148)' ;
-        }
-        red = this.value;
-        green = 255 -red/10;
-        blue = 0;
-        /*
-        
-        if(this.value >= 0 && this.value <= 128) {
-            // interpolate between (1.0f, 0.0f, 0.0f) and (0.0f, 1.0f, 0.0f)
-             green = this.value / 128.0;
-             red = 1.0 - green;
-             blue = 0.0;
-            
-            } else if(this.value > 128 && this.value <= 255) {
-             red = 0.0;
-             blue = (this.value - 127) / 128.0;
-             green = 1.0 - blue;
-            }
-            */
-            return 'rgb('+red+','+green+','+blue+')' ;
-    }
+    map.DrawBorders () /// TODO TMP
+
 }
+
+
+map.DrawBorders = function () {
+    globals.cells.forEach(cell => {
+      if (cell.isOnBorder)
+      cell.value = 130;
+      cell.render();
+    });
+}
+
+
+function generatePointsByGrid() {
+    let chaos = 10;
+    pts = new Array();
+    for (let i = 0; i < (density / 2); i++) {
+        for (let j = 0; j < (density / 2); j++) {
+
+        let x = i * (globals.height / (density / 2)) + plusOrMinus() * chaos;
+        let y = j * (globals.width / (density / 2)) + plusOrMinus() * chaos;
+        pts.push([globals.mouseX, globals.mouseY]);
+        console.log(i * (globals.width / (density / 2)), j * (globals.height / (density / 2)));
+        }
+    }
+    return pts;
+}
+
+
+function plusOrMinus() {
+    return (Math.random() - 0.5) * 2;
+} 
+
+export default map;

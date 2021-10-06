@@ -1,4 +1,4 @@
-const gradient = new Array(["rgb(112,153,89)",0.000],
+var gradient = new Array(["rgb(112,153,89)",0.000],
 ["rgb(112,153,89)",0.790],
 ["rgb(120,158,93)",1.590],
 ["rgb(120,158,93)",2.380],
@@ -124,3 +124,5 @@ const gradient = new Array(["rgb(112,153,89)",0.000],
 ["rgb(242,222,194)",97.620],
 ["rgb(255,255,255)",98.410],
 )
+
+export default gradient;

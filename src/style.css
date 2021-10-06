@@ -12,3 +12,7 @@ html, body {
     border:2px solid white;
     pointer-events: none
   }
+
+canvas {
+  position: absolute;
+}
