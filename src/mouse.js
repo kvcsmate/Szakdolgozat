@@ -1,5 +1,6 @@
 import globals from './globals.js';
-
+import water from './watermap.js';
+import map from './map.js';
 
 var mouse = {};
 var interval;
@@ -35,7 +36,8 @@ var handleMouseDown = function () {
 		globals.cells.forEach(cell => {
 			let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
 			if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
-				cell.value = Math.min(cell.value + 5, 255);
+				cell.value = Math.min(cell.value + 5-(distanceFromMouse/Math.pow(globals.circleRadius,2))*5, 255);
+				cell.isLocalMax=true;
 				cell.render();
 			};
 		})
@@ -74,12 +76,15 @@ var oMousePos = function (evt) {
 
 var stopIncrement = function () {
 	clearInterval(interval);
+	water.DrawShallowWater();
+	map.DrawLocalMaximums();
 }
 
 
 var scroll = function (e) {
 	redrawCircle(e);
 	globals.circleRadius = e.wheelDelta < 0 ? Math.min(globals.circleRadius + 5, 200) : Math.max(globals.circleRadius - 5, 10);
+	
 }
 
 

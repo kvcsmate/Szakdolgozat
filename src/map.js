@@ -9,7 +9,6 @@ map.InitMap = function () {
     let points = Array.from({ length: 5000 }, () => [Math.random() * globals.width, Math.random() * globals.height])
     let delaunay = d3.Delaunay.from(points);
     globals.voronoi = delaunay.voronoi([0, 0, globals.width, globals.height]);
-  
     for (let i = 0; i < points.length; i++) {
       let cell = new Cell(globals.voronoi.cellPolygon(i), 0, i, points[i])
       globals.cells.push(cell);
@@ -22,11 +21,57 @@ map.InitMap = function () {
       globals.context.fillStyle = globals.defaultColor;
       globals.context.fill();
     }
-    map.DrawBorders () /// TODO TMP
+    //map.DrawBorders () /// TODO TMP
+
+}
+
+map.localmaximums = function () {
+  var Localmaximums = []
+  globals.cells.forEach(cell => {
+    if(cell.isLocalMax)
+    {
+      if(cell.value ==0)
+      {
+        cell.isLocalMax = false;
+      }
+      else
+      {
+        var neighbors = [...cell.neighbors]
+        for (const i of neighbors) {
+          const neighbor = globals.cells[i];
+          if(neighbor.value>cell.value)
+          {
+            cell.isLocalMax=false;
+          }
+          else
+          {
+            neighbor.isLocalMax = false;
+          }
+        }
+      }
+      if(cell.isLocalMax)
+      {
+        Localmaximums.push(cell);    
+      }
+    }
+  });
+  return Localmaximums;
 
 }
 
 
+map.DrawLocalMaximums = function () {
+  var localmax = [];
+  localmax = [...this.localmaximums()];
+  globals.context.fillStyle = "purple";
+  localmax.forEach(element => {
+    globals.context.beginPath();
+    globals.voronoi.renderCell(element.id, globals.context)
+    globals.context.fill();
+    console.log(element.id);
+  });
+  
+}
 map.DrawBorders = function () {
     globals.cells.forEach(cell => {
       if (cell.isOnBorder)

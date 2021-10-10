@@ -22,17 +22,21 @@ export default class Cell {
         this.y = point[1];
         this.value = value;
         this.isOnBorder = IsonBorder(this);
+        this.isLocalMax = true;
+        this.neighbors =[...globals.voronoi.neighbors(this.id)];
 
     }
 
 
     render() {
+        globals.context.fillStyle = "rgb(112,153,89)"
         globals.context.fillStyle = this.heightColorbyGradient();
         globals.context.beginPath();
         globals.voronoi.renderCell(this.id, globals.context)
         globals.context.fill();
     }
 
+   
 
     contains(x, y) {
         return globals.voronoi.contains(this.id, x, y);
