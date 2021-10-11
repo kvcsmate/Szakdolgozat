@@ -14,5 +14,6 @@ export default {
     circleRadius: 50,
     defaultColor : 'rgb(0,105,148)',
     shallowColor : 'rgb(83,156,202)',
+    riverLevel : 50,
     
 }

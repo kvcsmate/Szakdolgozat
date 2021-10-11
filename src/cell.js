@@ -24,7 +24,7 @@ export default class Cell {
         this.isOnBorder = IsonBorder(this);
         this.isLocalMax = true;
         this.neighbors =[...globals.voronoi.neighbors(this.id)];
-
+        this.isLake = false;
     }
 
 
@@ -46,6 +46,10 @@ export default class Cell {
     heightColorbyGradient() {
         if (this.value == 0) {
             return globals.defaultColor;
+        }
+        if(this.isLake)
+        {
+            return globals.shallowColor;
         }
         let colorindex = 0;
         let cval = this.value / 2.25;

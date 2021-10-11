@@ -9,6 +9,7 @@ function Main() {
   InitGlobals ();
   map.InitMap ();
   mouse.SetMouseEvents();
+  console.log(map.commonpoint(globals.cells[0],globals.cells[globals.cells[0].neighbors[0]]));
 }
 
 function InitGlobals () {

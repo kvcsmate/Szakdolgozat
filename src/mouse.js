@@ -1,5 +1,6 @@
 import globals from './globals.js';
 import water from './watermap.js';
+import River from './river.js';
 import map from './map.js';
 
 var mouse = {};
@@ -36,6 +37,7 @@ var handleMouseDown = function () {
 		globals.cells.forEach(cell => {
 			let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
 			if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
+				cell.isLake = false;
 				cell.value = Math.min(cell.value + 5-(distanceFromMouse/Math.pow(globals.circleRadius,2))*5, 255);
 				cell.isLocalMax=true;
 				cell.render();
@@ -45,6 +47,7 @@ var handleMouseDown = function () {
 		globals.cells.forEach(cell => {
 			let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
 			if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
+				cell.isLake = false;
 				cell.value = Math.max(cell.value - 1, 0);
 				cell.render();
 			};
@@ -76,8 +79,13 @@ var oMousePos = function (evt) {
 
 var stopIncrement = function () {
 	clearInterval(interval);
+	
+	var rivers = [...water.CreateRivers()];
+	rivers.forEach(element => {
+		water.DrawRiver(element);
+	});
 	water.DrawShallowWater();
-	map.DrawLocalMaximums();
+
 }
 
 

@@ -25,8 +25,8 @@ map.InitMap = function () {
 
 }
 
-map.localmaximums = function () {
-  var Localmaximums = []
+map.LocalMaximums = function () {
+  var localmaximums = []
   globals.cells.forEach(cell => {
     if(cell.isLocalMax)
     {
@@ -51,14 +51,45 @@ map.localmaximums = function () {
       }
       if(cell.isLocalMax)
       {
-        Localmaximums.push(cell);    
+        localmaximums.push(cell);    
       }
     }
   });
-  return Localmaximums;
+  return localmaximums;
 
 }
-
+map.commonpoint = function (cell1,cell2) 
+{
+  /*
+  const points = [];
+  for (let i = 0; i < cell1.voronoi.length; i++) 
+  {
+    for (let j = 0; j < cell2.voronoi.length; j++) 
+    {
+        if(cell1.voronoi[i][0] == cell2.voronoi[j][0] && cell1.voronoi[i][1] == cell2.voronoi[j][1] )
+        {
+          if(points.length>1)
+          {
+            return points;
+          }
+          points.push(cell1.voronoi[i]);
+        }
+    }
+    
+  } return points;*/
+  for (let i = 0; i < cell1.voronoi.length; i++) 
+  {
+    for (let j = 0; j < cell2.voronoi.length; j++) 
+    {
+        if(cell1.voronoi[i][0] == cell2.voronoi[j][0] && cell1.voronoi[i][1] == cell2.voronoi[j][1] )
+        {
+          return cell1.voronoi[i];
+        }
+    }
+    
+  }
+  
+}
 
 map.DrawLocalMaximums = function () {
   var localmax = [];
