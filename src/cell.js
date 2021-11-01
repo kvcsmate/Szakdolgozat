@@ -22,17 +22,22 @@ export default class Cell {
         this.y = point[1];
         this.value = value;
         this.isOnBorder = IsonBorder(this);
-
+        this.isLocalMax = true;
+        this.neighbors =[...globals.voronoi.neighbors(this.id)];
+        this.isLake = false;
     }
 
 
     render() {
+        globals.context.fillStyle = "rgb(112,153,89)"
         globals.context.fillStyle = this.heightColorbyGradient();
+        globals.context.lineJoin = 'bevel';
         globals.context.beginPath();
         globals.voronoi.renderCell(this.id, globals.context)
         globals.context.fill();
     }
 
+   
 
     contains(x, y) {
         return globals.voronoi.contains(this.id, x, y);
@@ -42,6 +47,10 @@ export default class Cell {
     heightColorbyGradient() {
         if (this.value == 0) {
             return globals.defaultColor;
+        }
+        if(this.isLake)
+        {
+            return globals.shallowColor;
         }
         let colorindex = 0;
         let cval = this.value / 2.25;

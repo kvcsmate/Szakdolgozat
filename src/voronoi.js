@@ -655,7 +655,6 @@
                 this.xmin = i,
                 this.ymax = s,
                 this.ymin = e,
-                this.value = 0
                 this._init()
             }
             update() {

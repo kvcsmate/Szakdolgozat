@@ -9,7 +9,6 @@ map.InitMap = function () {
     let points = Array.from({ length: 5000 }, () => [Math.random() * globals.width, Math.random() * globals.height])
     let delaunay = d3.Delaunay.from(points);
     globals.voronoi = delaunay.voronoi([0, 0, globals.width, globals.height]);
-  
     for (let i = 0; i < points.length; i++) {
       let cell = new Cell(globals.voronoi.cellPolygon(i), 0, i, points[i])
       globals.cells.push(cell);
@@ -22,11 +21,108 @@ map.InitMap = function () {
       globals.context.fillStyle = globals.defaultColor;
       globals.context.fill();
     }
-    map.DrawBorders () /// TODO TMP
+    //map.DrawBorders () /// TODO TMP
 
 }
 
+map.LocalMaximums = function () {
+  var localmaximums = []
+  globals.cells.forEach(cell => {
+    if(cell.isLocalMax)
+    {
+      if(cell.value ==0)
+      {
+        cell.isLocalMax = false;
+      }
+      else
+      {
+        var neighbors = [...cell.neighbors]
+        for (const i of neighbors) {
+          const neighbor = globals.cells[i];
+          if(neighbor.value>cell.value)
+          {
+            cell.isLocalMax=false;
+          }
+          else
+          {
+            neighbor.isLocalMax = false;
+          }
+        }
+      }
+      if(cell.isLocalMax)
+      {
+        localmaximums.push(cell);    
+      }
+    }
+  });
+  return localmaximums;
 
+}
+map.commonpoint = function (cell1,cell2) 
+{
+  
+  const points = [];
+  /*
+  for (let i = 0; i < cell1.voronoi.length; i++) 
+  {
+    for (let j = 0; j < cell2.voronoi.length; j++) 
+    {
+        if(cell1.voronoi[i][0] == cell2.voronoi[j][0] && cell1.voronoi[i][1] == cell2.voronoi[j][1] )
+        {
+          if(points.length>1)
+          {
+            return points;
+          }
+          points.push(cell1.voronoi[i]);
+        }
+    }
+    
+  } return points;*/
+  for (let i = 0; i < cell1.voronoi.length; i++) 
+  {
+    
+    for (let j = 0; j < cell2.voronoi.length; j++) 
+    {
+        if(cell1.voronoi[i][0] == cell2.voronoi[j][0] && cell1.voronoi[i][1] == cell2.voronoi[j][1]  )
+        {
+          let alreadycontains = false;
+          for (let k = 0; k < points.length; k++) {
+            if( points[k][0]==cell2.voronoi[j][0] && points[k][1] == cell2.voronoi[j][1] )
+            {
+              alreadycontains = true;
+              k = points.length;
+            }
+            
+          }
+          if (!alreadycontains) 
+          {
+            points.push(cell1.voronoi[i]);
+          }
+        }
+    }
+    
+  }
+  return points;
+}
+map.distance = function (point1, point2)
+{
+  let a = point1[0] - point2[0];
+  let b = point1[1] - point2[1];
+
+  return Math.sqrt(a*a + b*b);
+}
+map.DrawLocalMaximums = function () {
+  var localmax = [];
+  localmax = [...this.localmaximums()];
+  globals.context.fillStyle = "purple";
+  localmax.forEach(element => {
+    globals.context.beginPath();
+    globals.voronoi.renderCell(element.id, globals.context)
+    globals.context.fill();
+    console.log(element.id);
+  });
+  
+}
 map.DrawBorders = function () {
     globals.cells.forEach(cell => {
       if (cell.isOnBorder)
