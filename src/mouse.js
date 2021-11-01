@@ -33,6 +33,7 @@ var mouseDown = function (e) {
 
 
 var handleMouseDown = function () {
+
 	if(globals.iselElevatingActive)
 	{
 
