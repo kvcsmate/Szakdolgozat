@@ -8,7 +8,7 @@ Main ()
 
 function Main() {
   InitGlobals ();
-  map.InitMap ();
+  globals.map.Initmap ();
   mouse.SetMouseEvents();
 }
 
@@ -24,7 +24,6 @@ function InitGlobals () {
   globals.context2 = canvas2.getContext("2d");
   canvas2.width = globals.width - 1;
   canvas2.height = globals.height - 1;
-  globals.cells = new Array();
 
   var buttons = document.getElementsByTagName('button');
   for (let i = 0; i < buttons.length; i++) {

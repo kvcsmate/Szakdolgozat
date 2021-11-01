@@ -1,7 +1,5 @@
 import globals from './globals.js';
 import water from './watermap.js';
-import River from './river.js';
-import map from './map.js';
 
 var mouse = {};
 var interval;
@@ -36,27 +34,37 @@ var handleMouseDown = function () {
 
 	if(globals.iselElevatingActive)
 	{
-
 		var rsquare = Math.pow(globals.circleRadius,2);
 		if (lastPressedMouseButton == MOUSEKEY.LEFT) {
-			globals.cells.forEach(cell => {
+			globals.map.cells.forEach(cell => {
 				let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
 				
 				if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
 					cell.isLake = false;
-					cell.value = Math.min(cell.value + 5-(distanceFromMouse/rsquare)*5+ 2*Math.random(), 255);
+					cell.hasWater = false;
+					cell.SetValue (Math.min(cell.GetValue () + 5-(distanceFromMouse/rsquare)*5+ 2*Math.random(), 255))
 					cell.isLocalMax=true;
 					cell.render();
 				};
 			})
 		} else if (lastPressedMouseButton == MOUSEKEY.RIGHT) {
-			globals.cells.forEach(cell => {
+			globals.map.cells.forEach(cell => {
 				let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
 				if (distanceFromMouse < rsquare) {
 					cell.isLake = false;
-					cell.value = Math.max(cell.value - 2 - 2+(distanceFromMouse/rsquare)*2, 0);
+					cell.SetValue (Math.max(cell.GetValue () - 2 - 2+(distanceFromMouse/rsquare)*2, 0))
+					cell.hasWater = (cell.GetValue () == 0);
 					cell.render();
 				};
+			})
+		}
+		if (lastPressedMouseButton == MOUSEKEY.MIDDLE) {
+			globals.map.cells.forEach(cell => {
+				let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
+				
+				if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
+					console.log(cell.waterDistance);
+				}
 			})
 		}
 	}
@@ -95,6 +103,7 @@ var stopIncrement = function () {
 	rivers.forEach(element => {
 		water.DrawRiver(element);
 	});
+	
 	water.DrawShallowWater();
 
 }

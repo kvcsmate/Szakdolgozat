@@ -1,4 +1,4 @@
-// https://github.com/d3/d3-delaunay v6.0.2 Copyright 2018-2021 Observable, Inc., 2021 Mapbox
+// https://github.com/d3/d3-delaunay v6.0.2 Copyright 2018-2021 Observable, Inc., 2021 globals.mapbox
 !function (t, i) {
         "object" == typeof exports && "undefined" != typeof module ? i(exports) : "function" == typeof define && define.amd ? define(["exports"], i) : i((t = "undefined" != typeof globalThis ? globalThis : t || self).d3 = t.d3 || {})
     }(this, (function (t) {
