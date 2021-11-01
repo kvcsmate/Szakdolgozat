@@ -1,20 +1,23 @@
 import globals from './globals.js';
-import map from './map.js';
 import River from './river.js';
-var counter = 0;
+let counter = 0;
 var underlevel = false;
 var water = {}; 
+
+
 water.DrawShallowWater = function()
 {
-    for (const cell of globals.cells) 
+    for (const cell of globals.map.cells) 
     {
-        if(cell.value==0)
+        cell.shallowWater = false;
+        if(cell.GetValue () == 0)
         {
             var neighbors =   [...cell.neighbors]
             for (let i = 0; i < neighbors.length; i++) 
             {
-                if (globals.cells[neighbors[i]].value>0) 
+                if (globals.map.cells[neighbors[i]].GetValue ()>0) 
                 {
+                    cell.shallowWater = true;
                     ShallowWaterRender(cell.id);
                 }
 
@@ -35,7 +38,7 @@ function ShallowWaterRender(id) {
 water.CreateRivers = function()
 {
     var rivers = [];
-    var tops = [...map.LocalMaximums()];
+    var tops = [...globals.map.LocalMaximums()];
     tops.forEach(hilltop => {
         var river = new River();
         counter = 0;
@@ -51,7 +54,6 @@ water.CreateRivers = function()
 
 water.DrawRiverfix = function(river)
 {
-    
     globals.context.lineWidth = 1;
     globals.context.lineJoin = 'bevel';
     globals.context.strokeStyle = globals.shallowColor;
@@ -69,9 +71,10 @@ water.DrawRiverfix = function(river)
     //globals.context.closePath();
     globals.context.stroke();
 }
+
+
 water.DrawRiver = function(river)
 {
-    
     globals.context.lineWidth = 2;
     //globals.context.lineJoin = 'bevel';
     globals.context.strokeStyle = globals.shallowColor;
@@ -80,7 +83,6 @@ water.DrawRiver = function(river)
 
     for(var i = 0; i < river.points.length-1; i ++)
     {
-    
       var x_mid = (river.points[i][0] + river.points[i+1][0]) / 2;
       var y_mid = (river.points[i][1] + river.points[i+1][1]) / 2;
       var cp_x1 = (x_mid + river.points[i][0]) / 2;
@@ -91,63 +93,53 @@ water.DrawRiver = function(river)
     globals.context.stroke();
 }
 
+
 function expandRiver(river,cell)
 {
     counter++;
 
-    if(cell.value==0 || counter > 30)
-    {
+    if(cell.GetValue () == 0 || counter > 30) {
         return;
     }
     var cell_lowest = cell;
     var neighbors = [...cell.neighbors];
-    var lowest_neighbor = globals.cells[neighbors[0]];
+    var lowest_neighbor = globals.map.cells[neighbors[0]];
     //console.log(neighbors);
-    for (let i = 1;i<neighbors.length;++i) 
-    {
-        let newcell = globals.cells[neighbors[i]];
-        if(lowest_neighbor.value>newcell.value)
-        {
-            
+    for (let i = 1;i<neighbors.length;++i) {
+        let newcell = globals.map.cells[neighbors[i]];
+        if(lowest_neighbor.GetValue ()>newcell.GetValue ()) {
             lowest_neighbor = newcell;
         }
 
     }
-        if(lowest_neighbor.value<globals.riverLevel ||underlevel)
-        {
+        if (lowest_neighbor.GetValue () < globals.riverLevel || underlevel) {
             underlevel = true;
-            if(lowest_neighbor.value>cell_lowest.value)
-            {
-                if(Math.abs(lowest_neighbor.value-cell_lowest.value)<1)
-                {
-                    lowest_neighbor.value = Math.max(cell_lowest.value-1,1);
+            if(lowest_neighbor.GetValue ()>cell_lowest.GetValue ()) {
+                if(Math.abs(lowest_neighbor.GetValue () - cell_lowest.GetValue ())<1) {
+                    lowest_neighbor.SetValue ( Math.max(cell_lowest.GetValue ()-1,1));
                 }
-                else if(counter>3)
-                {
+                else if(counter>3) {
                     cell_lowest.isLake = true;
-                    cell_lowest.value = lowest_neighbor.value+1;
+                    cell_lowest.hasWater = true;
+                    cell_lowest.SetValue (lowest_neighbor.GetValue () + 1);
                     cell_lowest.render();
-                }
-                else
-                {
+                } else {
                     return;
                 }
-                
             }
-            var route = [...map.commonpoint(cell_lowest,lowest_neighbor)];
-            if(map.distance([cell_lowest.x,cell_lowest.y],route[0]) < map.distance([cell_lowest.x,cell_lowest.y],route[1]))
-            {
-                river.addPoint(route[0][0],route[0][1],lowest_neighbor.value);
+            var route = [...globals.map.commonpoint(cell_lowest,lowest_neighbor)];
+            if (globals.map.distance([cell_lowest.x,cell_lowest.y],route[0]) < globals.map.distance([cell_lowest.x,cell_lowest.y],route[1])) {
+                river.addPoint(route[0][0],route[0][1],lowest_neighbor.GetValue ());
                 //river.addPoint(route[1][0],route[1][1],lowest_neighbor.value);
             }
-            else
-            {
-                river.addPoint(route[1][0],route[1][1],lowest_neighbor.value);
+            else {
+                river.addPoint(route[1][0],route[1][1],lowest_neighbor.GetValue ());
                 //river.addPoint(route[0][0],route[0][1],lowest_neighbor.value);
             }
             //river.addPoint(route[0],route[1],lowest_neighbor.value);
             //river.addPoint(route[1][0],route[1][1],lowest_neighbor.value);
         }
-        expandRiver(river,lowest_neighbor);
+        lowest_neighbor.hasWater = true;
+        expandRiver (river,lowest_neighbor);
 }
 export default water;
