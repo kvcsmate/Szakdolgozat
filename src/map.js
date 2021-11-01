@@ -60,8 +60,9 @@ map.LocalMaximums = function () {
 }
 map.commonpoint = function (cell1,cell2) 
 {
-  /*
+  
   const points = [];
+  /*
   for (let i = 0; i < cell1.voronoi.length; i++) 
   {
     for (let j = 0; j < cell2.voronoi.length; j++) 
@@ -79,18 +80,37 @@ map.commonpoint = function (cell1,cell2)
   } return points;*/
   for (let i = 0; i < cell1.voronoi.length; i++) 
   {
+    
     for (let j = 0; j < cell2.voronoi.length; j++) 
     {
-        if(cell1.voronoi[i][0] == cell2.voronoi[j][0] && cell1.voronoi[i][1] == cell2.voronoi[j][1] )
+        if(cell1.voronoi[i][0] == cell2.voronoi[j][0] && cell1.voronoi[i][1] == cell2.voronoi[j][1]  )
         {
-          return cell1.voronoi[i];
+          let alreadycontains = false;
+          for (let k = 0; k < points.length; k++) {
+            if( points[k][0]==cell2.voronoi[j][0] && points[k][1] == cell2.voronoi[j][1] )
+            {
+              alreadycontains = true;
+              k = points.length;
+            }
+            
+          }
+          if (!alreadycontains) 
+          {
+            points.push(cell1.voronoi[i]);
+          }
         }
     }
     
   }
-  
+  return points;
 }
+map.distance = function (point1, point2)
+{
+  let a = point1[0] - point2[0];
+  let b = point1[1] - point2[1];
 
+  return Math.sqrt(a*a + b*b);
+}
 map.DrawLocalMaximums = function () {
   var localmax = [];
   localmax = [...this.localmaximums()];

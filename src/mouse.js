@@ -33,25 +33,31 @@ var mouseDown = function (e) {
 
 
 var handleMouseDown = function () {
-	if (lastPressedMouseButton == MOUSEKEY.LEFT) {
-		globals.cells.forEach(cell => {
-			let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
-			if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
-				cell.isLake = false;
-				cell.value = Math.min(cell.value + 5-(distanceFromMouse/Math.pow(globals.circleRadius,2))*5, 255);
-				cell.isLocalMax=true;
-				cell.render();
-			};
-		})
-	} else if (lastPressedMouseButton == MOUSEKEY.RIGHT) {
-		globals.cells.forEach(cell => {
-			let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
-			if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
-				cell.isLake = false;
-				cell.value = Math.max(cell.value - 1, 0);
-				cell.render();
-			};
-		})
+	if(globals.iselElevatingActive)
+	{
+
+		var rsquare = Math.pow(globals.circleRadius,2);
+		if (lastPressedMouseButton == MOUSEKEY.LEFT) {
+			globals.cells.forEach(cell => {
+				let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
+				
+				if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
+					cell.isLake = false;
+					cell.value = Math.min(cell.value + 5-(distanceFromMouse/rsquare)*5+ 2*Math.random(), 255);
+					cell.isLocalMax=true;
+					cell.render();
+				};
+			})
+		} else if (lastPressedMouseButton == MOUSEKEY.RIGHT) {
+			globals.cells.forEach(cell => {
+				let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
+				if (distanceFromMouse < rsquare) {
+					cell.isLake = false;
+					cell.value = Math.max(cell.value - 2 - 2+(distanceFromMouse/rsquare)*2, 0);
+					cell.render();
+				};
+			})
+		}
 	}
 }
 
@@ -61,12 +67,16 @@ var redrawCircle = function (evt) {
 	let size = 4 * globals.circleRadius;
 
 	globals.context2.clearRect(lastCircleX - offset, lastCircleY - offset, size, size);
-	globals.context2.beginPath();
-	globals.context2.arc(evt.pageX, evt.pageY, globals.circleRadius, 0, 2 * Math.PI);
-	globals.context2.stroke();
+	
+	if(globals.iselElevatingActive)
+	{
+		globals.context2.beginPath();
+		globals.context2.arc(evt.pageX, evt.pageY, globals.circleRadius, 0, 2 * Math.PI);
+		globals.context2.stroke();
 
-	lastCircleX = evt.pageX
-	lastCircleY = evt.pageY
+		lastCircleX = evt.pageX
+		lastCircleY = evt.pageY
+	}
 }
 
 

@@ -31,6 +31,7 @@ export default class Cell {
     render() {
         globals.context.fillStyle = "rgb(112,153,89)"
         globals.context.fillStyle = this.heightColorbyGradient();
+        globals.context.lineJoin = 'bevel';
         globals.context.beginPath();
         globals.voronoi.renderCell(this.id, globals.context)
         globals.context.fill();
