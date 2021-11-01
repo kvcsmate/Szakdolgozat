@@ -1,4 +1,5 @@
 import globals from './globals.js';
+import Cell from './cell.js';
 
 
 var mouse = {};
@@ -35,6 +36,7 @@ var handleMouseDown = function () {
 		globals.cells.forEach(cell => {
 			let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
 			if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
+				console.log( ...globals.voronoi.neighbors (cell.id));
 				cell.value = Math.min(cell.value + 5, 255);
 				cell.render();
 			};
