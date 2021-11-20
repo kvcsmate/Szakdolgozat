@@ -124,5 +124,13 @@ var gradient = new Array(["rgb(112,153,89)",0.000],
 ["rgb(242,222,194)",97.620],
 ["rgb(255,255,255)",98.410],
 )
+gradient.latitude = new Array([8, 26.11],[10.5, 21.28],[19.4, 18],[25.8, 23.61],[32.9, 18.22],[33.4, 20.22],[39, 11.61],[39.1, 13.11],[40.7, 10.22],[43, 10.28],[46.2, 3.22],[49.2, 8.89],[58.4, 4.22]
+    );
+//     let asd = "";
+// gradient.latitude.forEach(element => {
 
+//     element[1] = Math.round((element[1]-32)* 0.5556 * 100)/100;
+//     asd += `[${element[0]}, ${element[1]}],`
+// });
+// console.log(asd);
 export default gradient;

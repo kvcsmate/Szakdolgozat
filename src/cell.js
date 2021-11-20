@@ -1,18 +1,6 @@
 import globals from './globals.js';
 import gradient from './gradient.js';
-
-const BIOMES = {
-    // [temperature,precipitation]
-	DESERT: [0,],
-    COLDDESERT: [],
-    ICESHEET: "icesheet",
-    RAINFOREST: "rainforest",
-    FOREST: "forest",
-    TAIGA: "taiga",
-    SAVANNA: "savanna",
-    STEPPE: "steppe",
-    TUNDRA: "tundra",
-}
+import biome from './biome.js';
 
 
 function IsNear (a ,b) {
@@ -41,11 +29,13 @@ export default class Cell {
         this.neighbors =[...globals.voronoi.neighbors(this.id)];
         this.isLake = false;
         this.latitude = 0;
-        this.biome = BIOMES.FOREST;
+        this.biome = biome.BIOMES.FOREST;
         this.hasWater = true;
         this.waterDistance = 0;
         this.shallowWater = false;
+        this.temperature = 0;
     }
+
 
     SetValue (number) {
         globals.map.cellsToUpdateWaterdistance.add(this.id);

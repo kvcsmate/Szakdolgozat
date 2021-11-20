@@ -2,7 +2,8 @@ import globals from './globals.js';
 import mouse from './mouse.js';
 import map from './map.js';
 import gui from './gui.js'
-
+import biome from './biome.js';
+import mapmarkers from './mapmarkers.js';
 
 Main () 
 
@@ -25,11 +26,19 @@ function InitGlobals () {
   canvas2.width = globals.width - 1;
   canvas2.height = globals.height - 1;
 
+  var mapmarkercanvas = document.getElementById("mapmarkers");
+  globals.mapmarkercontext = mapmarkercanvas.getContext("2d");
+  mapmarkercanvas.width = globals.width - 1;
+  mapmarkercanvas.height = globals.height - 1;
+  mapmarkers.DrawLatitude();
+
   var buttons = document.getElementsByTagName('button');
   for (let i = 0; i < buttons.length; i++) {
     let button = buttons[i];
     gui.buttonInit(button);
+
 }
+gui.setMapsizebuttons();
   /*var gui = document.getElementById("gui");
   globals.guicontext = canvas.getContext("2d");
   gui.width = globals.width - 1;

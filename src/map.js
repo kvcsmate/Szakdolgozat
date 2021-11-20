@@ -1,6 +1,7 @@
 import globals from './globals.js';
 import Cell from './cell.js';
 import gradient from './gradient.js';
+import biome from './biome.js';
 
 globals.map.Initmap = function () {
   this.cells = new Array();
@@ -54,16 +55,13 @@ globals.map.LocalMaximums = function () {
 }
 
 
-globals.map.FindNearestWater = function (cell, outeralreadyVisited) {
-
-}
 
 
 globals.map.UpdateWaterDistances = function () {
   let starterSet = new Set();
   globals.map.cells.forEach(element => {
     element.waterDistance = 0;
-    if ((element.GetValue () == 0 && element.shallowWater ) || (element.GetValue () != 0 && element.hasWater))
+    if (element.GetValue () == 0 && element.shallowWater )
       starterSet.add(...element.GetNeighbors ());
   });
 
@@ -85,12 +83,13 @@ globals.map.UpdateWaterDistances = function () {
     starterSet.forEach(element => {
       if (element.waterDistance == 0 && (element.GetValue () != 0 ) && !element.hasWater){
         neighbors= new Set([...element. GetNeighbors(),...neighbors]);
-        element.waterDistance = waterLevel*10;
+        element.waterDistance = waterLevel;
       }
     });
     starterSet = neighbors;
     waterLevel++;
   }
+  biome.SetTemperatures();
 
 }
 
@@ -100,8 +99,6 @@ function redraw() {
     let color;
       if (cell.waterDistance == 0) {
         color = globals.defaultColor;
-    } else if (cell.isLake) {
-        color = globals.shallowColor;
     } else {
     let colorindex = 0;
     let cval = cell.waterDistance;
@@ -120,7 +117,7 @@ function redraw() {
     globals.voronoi.renderCell(cell.id, globals.context)
     globals.context.fill();
   
-  })
+  });
 }
 
 document.getElementsByName("water")[0].onclick = globals.map.UpdateWaterDistances;

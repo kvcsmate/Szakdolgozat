@@ -63,7 +63,7 @@ var handleMouseDown = function () {
 				let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
 				
 				if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
-					console.log(cell.waterDistance);
+					console.log(cell);
 				}
 			})
 		}

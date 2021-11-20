@@ -40,13 +40,16 @@ water.CreateRivers = function()
     var rivers = [];
     var tops = [...globals.map.LocalMaximums()];
     tops.forEach(hilltop => {
-        var river = new River();
-        counter = 0;
-        underlevel = false;
-        expandRiver(river,hilltop)
-        if(river.points.length>5)
+        if(hilltop.distancefromwater < globals.dryness)
         {
-            rivers.push(river);
+            var river = new River();
+            counter = 0;
+            underlevel = false;
+            expandRiver(river,hilltop)
+            if(river.points.length>5)
+            {
+                rivers.push(river);
+            }
         }
     });
     return rivers;
