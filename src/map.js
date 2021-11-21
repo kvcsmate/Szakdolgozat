@@ -3,6 +3,7 @@ import Cell from './cell.js';
 import gradient from './gradient.js';
 import biome from './biome.js';
 
+
 globals.map.Initmap = function () {
   this.cells = new Array();
   this.cellsToUpdateWaterdistance = new Set ()
@@ -14,7 +15,8 @@ globals.map.Initmap = function () {
     let cell = new Cell(globals.voronoi.cellPolygon(i), 0, i, points[i])
     this.cells.push(cell);
   }
-
+  this.landcells = new Array();
+  this.localmaximums = new Array();
   //clear the lines
   {
     globals.context.beginPath();
@@ -28,7 +30,7 @@ globals.map.Initmap = function () {
 
 
 globals.map.LocalMaximums = function () {
-  var localmaximums = []
+  globals.map.localmaximums = new Array();
   this.cells.forEach(cell => {
     if (cell.isLocalMax) {
       if (cell.GetValue() == 0) {
@@ -53,8 +55,14 @@ globals.map.LocalMaximums = function () {
   });
   return localmaximums;
 }
-
-
+globals.map.GetLandCells = function() {
+  globals.map.landcells = new Array()
+  globals.map.cells.forEach(cell => {
+    if (cell.GetValue()!=0) {
+      landcells.push(cell);
+    }
+  });
+}
 
 
 globals.map.UpdateWaterDistances = function () {
@@ -82,7 +90,7 @@ globals.map.UpdateWaterDistances = function () {
     let neighbors = new Set ();
     starterSet.forEach(element => {
       if (element.waterDistance == 0 && (element.GetValue () != 0 ) && !element.hasWater){
-        neighbors= new Set([...element. GetNeighbors(),...neighbors]);
+        neighbors= new Set([...element.GetNeighbors(),...neighbors]);
         element.waterDistance = waterLevel;
       }
     });
