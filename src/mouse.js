@@ -112,6 +112,7 @@ var stopIncrement = function () {
 var scroll = function (e) {
 	redrawCircle(e);
 	globals.circleRadius = e.wheelDelta < 0 ? Math.min(globals.circleRadius + 5, 200) : Math.max(globals.circleRadius - 5, 10);
+
 	
 }
 
