@@ -18,11 +18,11 @@ export default {
     circleRadius: 50,
     defaultColor : 'rgb(0,105,148)',
     shallowColor : 'rgb(83,156,202)',
-    riverLevel : 999999,
+    riverLevel : 10000000,
     map : {},
     PoI : {},
     Latitude : 50,
     mapsize : 0.2,
-    dryness : 10,
+    dryness : 100000,
     // folyók hol generálódhatnak, értéke : dryness < distancefromwater
 }

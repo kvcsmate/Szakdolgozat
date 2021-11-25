@@ -49,11 +49,11 @@ globals.map.LocalMaximums = function () {
         }
       }
       if (cell.isLocalMax) {
-        localmaximums.push(cell);
+        globals.map.localmaximums.push(cell);
       }
     }
   });
-  return localmaximums;
+  return globals.map.localmaximums;
 }
 globals.map.GetLandCells = function() {
   globals.map.landcells = new Array()

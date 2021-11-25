@@ -4,11 +4,16 @@ export default class River{
     constructor()
     {
         this.points = [];
+        this.curve=[]
     }
     addPoint(x,y,z)
     {
         var point =[x,y,z]
         this.points.push(point);
+    }
+    addCurvePoints(x,y)
+    {
+        this.curve.push(x,y);
     }
     addVector(x1,y1,z1,x2,y2,z2)
     {

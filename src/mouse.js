@@ -101,9 +101,9 @@ var stopIncrement = function () {
 	
 	var rivers = [...water.CreateRivers()];
 	rivers.forEach(element => {
-		water.DrawRiver(element);
+		water.drawCurve(globals.context,element.curve);
 	});
-	
+	console.log(rivers);
 	water.DrawShallowWater();
 
 }
