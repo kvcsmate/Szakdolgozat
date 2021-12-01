@@ -26,6 +26,10 @@ function InitGlobals () {
   canvas2.width = globals.width - 1;
   canvas2.height = globals.height - 1;
 
+  globals.namesdiv = document.getElementById("labels");
+  globals.namesdiv.width = globals.width - 1;
+  globals.namesdiv.height = globals.height - 1;
+
   var mapmarkercanvas = document.getElementById("mapmarkers");
   globals.mapmarkercontext = mapmarkercanvas.getContext("2d");
   mapmarkercanvas.width = globals.width - 1;

@@ -13,6 +13,7 @@ export default {
     canvas: null,
     context: null,
     context2: null,
+    namesdiv: null,
     mapmarkercontext : null,
     guicontext : null,
     circleRadius: 50,
@@ -21,8 +22,10 @@ export default {
     riverLevel : 10000000,
     map : {},
     PoI : {},
+    labels : {},
     Latitude : 50,
     mapsize : 0.2,
     dryness : 100000,
+
     // folyók hol generálódhatnak, értéke : dryness < distancefromwater
 }
