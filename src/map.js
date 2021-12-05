@@ -101,8 +101,7 @@ globals.map.UpdateWaterDistances = function () {
 
 }
 
-
-function redraw() {
+globals.map.redraw = function() {
   globals.map.cells.forEach((cell)=>{
     let color;
       if (cell.waterDistance == 0) {
@@ -128,8 +127,7 @@ function redraw() {
   });
 }
 
-document.getElementsByName("water")[0].onclick = globals.map.UpdateWaterDistances;
-document.getElementsByName("waterColor")[0].onclick = redraw;
+
 
 
 

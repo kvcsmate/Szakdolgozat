@@ -99,12 +99,7 @@ var oMousePos = function (evt) {
 var stopIncrement = function () {
 	clearInterval(interval);
 	
-	var rivers = [...water.CreateRivers()];
-	rivers.forEach(element => {
-		water.drawCurve(globals.context,element.curve);
-	});
-	console.log(rivers);
-	water.DrawShallowWater();
+	
 
 }
 

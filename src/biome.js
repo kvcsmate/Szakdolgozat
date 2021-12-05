@@ -109,25 +109,20 @@ biome.SetTemperatures = function(){
                 precipitation = biome.TEMPERATURE.DRY;
             }
             cell.biome = [precipitation,temperature];
-            let color = biome.BIOMECOLORS[cell.biome];
-            console.log(cell.biome, biome.BIOMECOLORS[cell.biome] );
-            // for(let i=0;i<biome.BIOMECOLORS.length;i++)
-            // {
-            //     // if(precipitation == biome.BIOMECOLORS[i][0][0]==precipitation && precipitation == biome.BIOMECOLORS[i][0][1]==temperature)
-            //     // {
-            //     //     color = biome.BIOMECOLORS[i][1];
-            //     // }
-            // }
             
-            globals.context.fillStyle = color;
-            globals.context.lineJoin = 'bevel';
-            globals.context.beginPath();
-            globals.voronoi.renderCell(cell.id, globals.context)
-            globals.context.fill();
         }
 
     });
 }
 
-
+biome.drawBiome =  function (cell)
+{
+    let color = biome.BIOMECOLORS[cell.biome];
+            
+    globals.context.fillStyle = color;
+    globals.context.lineJoin = 'bevel';
+    globals.context.beginPath();
+    globals.voronoi.renderCell(cell.id, globals.context)
+    globals.context.fill();
+}
 export default biome;

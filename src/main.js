@@ -38,7 +38,7 @@ function InitGlobals () {
     gui.buttonInit(button);
 
 }
-gui.setMapsizebuttons();
+gui.SetButtons();
   /*var gui = document.getElementById("gui");
   globals.guicontext = canvas.getContext("2d");
   gui.width = globals.width - 1;
