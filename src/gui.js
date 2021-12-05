@@ -26,6 +26,7 @@ gui.setMapsizebuttons = function()
     var mediumbutton = document.getElementsByName("Medium")[0]
     var bigbutton = document.getElementsByName("Big")[0];
     
+    
     smallbutton.onclick = function() {
         globals.mapsize = 0.025;
         mapmarkers.DrawLatitude();

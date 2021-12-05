@@ -105,7 +105,9 @@ var stopIncrement = function () {
 	});
 	console.log(rivers);
 	water.DrawShallowWater();
-
+	globals.map.LocalMaximums().forEach(element => {
+		globals.names.AddName(element.x,element.y);
+	});
 }
 
 

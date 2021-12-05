@@ -22,7 +22,7 @@ export default {
     riverLevel : 10000000,
     map : {},
     PoI : {},
-    labels : {},
+    names : {},
     Latitude : 50,
     mapsize : 0.2,
     dryness : 100000,
