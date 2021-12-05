@@ -64,7 +64,14 @@ export default class Cell {
         globals.voronoi.renderCell(this.id, globals.context)
         globals.context.fill();
     }
-   
+    rendercolor(color)
+    {
+        globals.context.fillStyle = color;
+        globals.context.lineJoin = 'bevel';
+        globals.context.beginPath();
+        globals.voronoi.renderCell(this.id, globals.context)
+        globals.context.fill();
+    }
 
     contains(x, y) {
         return globals.voronoi.contains(this.id, x, y);

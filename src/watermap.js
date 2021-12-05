@@ -48,7 +48,8 @@ water.CreateRivers = function()
         var river = new River();
         counter = 0;
         underlevel = false;
-        expandRiver(river,hilltop)
+        //expandRiver(river,hilltop);
+        expandRiverNoRecursion(hilltop,river);
         if(river.points.length>5)
         {
             rivers.push(river);
@@ -199,6 +200,66 @@ function drawLines(ctx, pts) {
     globals.context.stroke();
 }
 
+function expandRiverNoRecursion(starterCell,river)
+{
+    // if(starterCell.distancefromwater >globals.dryness)
+    // {
+    //     return;
+    // }
+    let counter = 0;
+    var cell_lowest = starterCell;
+    let neighbors = new Array();
+    neighbors = [...cell_lowest.GetNeighbors()];
+    var lastcell = starterCell;
+    while(cell_lowest.GetValue()!=0)
+    {
+        
+        
+        let lowest_neighbor = neighbors[0];
+        for(let i=1;i<neighbors.length;++i)
+        {
+            let newcell = neighbors[i];
+            if(lowest_neighbor.GetValue()>newcell.GetValue()) {
+                lowest_neighbor = newcell;
+            }
+        }
+        if (cell_lowest.GetValue() < lowest_neighbor.GetValue()) {
+            //lowest_neighbor.SetValue(cell_lowest.GetValue());  
+            if (Math.abs(lowest_neighbor.GetValue () - cell_lowest.GetValue ())<1) 
+            {
+                lowest_neighbor.SetValue((cell_lowest.GetValue()));  
+            }
+            else
+            {
+                cell_lowest.SetValue(lowest_neighbor.GetValue());
+                cell_lowest.isLake = true;
+                cell_lowest.render();
+            }
+        }
+        // if (lowest_neighbor.GetValue() < globals.riverLevel) {
+
+            
+            
+        // }
+        river.addPoint(lowest_neighbor.x,lowest_neighbor.y,lowest_neighbor.GetValue())
+        river.addCurvePoints(lowest_neighbor.x,lowest_neighbor.y)
+
+        let oldneighbors = [...neighbors];
+        cell_lowest = lowest_neighbor;
+        neighbors = [...cell_lowest.GetNeighbors()];
+        neighbors = neighbors.filter(neighbor => !oldneighbors.includes(neighbor));
+        if (cell_lowest.hasWater) {
+            cell_lowest.isLake = true;
+            break;
+        }
+        cell_lowest.hasWater = true;
+    }
+    river.addPoint(cell_lowest.x,cell_lowest.y,cell_lowest.GetValue());
+    river.addCurvePoints(cell_lowest.x,cell_lowest.y);
+    cell_lowest.isLake = true;
+    cell_lowest.render();    
+
+}
 
 function expandRiver(river,cell)
 {
