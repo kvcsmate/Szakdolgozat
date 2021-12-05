@@ -43,6 +43,7 @@ gui.SetButtons = function()
     }
 
     
+    
     smallbutton.onclick = function() {
         globals.mapsize = 0.025;
         mapmarkers.DrawLatitude();
