@@ -3,6 +3,7 @@ import mapmarkers from './mapmarkers.js';
 import water from './watermap.js';
 import watermap from './watermap.js';
 import PoI from './PoI.js';
+import politicalmap from './politicalmap.js';
 var gui = {}
 gui.buttonInit = function(button)
 {
@@ -31,8 +32,9 @@ gui.SetButtons = function()
     var bigbutton = document.getElementsByName("Big")[0];
     var createRiversButton = document.getElementsByName("CreateRiver")[0];
     var drawridges = document.getElementsByName("Ridges")[0];
-    waterButton.onclick = globals.map.UpdateWaterDistances;
-    waterColor.onclick = globals.map.redraw;
+    var generateCities = document.getElementsByName("GenerateCities");
+    var generateBiomes = document.getElementsByName("GenerateBiomes");
+        waterColor.onclick = globals.map.redraw;
     createRiversButton.onclick = function() {
         var rivers = [...watermap.CreateRivers()];
 	    rivers.forEach(element => {
@@ -58,6 +60,15 @@ gui.SetButtons = function()
     };
     drawridges.onclick = function() {
         globals.PoI.Init();
+    }
+    generateCities.onclick = function() {
+        politicalmap.GenerateCities();
+    }
+    generateBiomes.onclick = function() {
+        biome.GenerateBiomes();
+    }
+    waterButton.onclick = function() {
+        globals.map.UpdateWaterDistances();
     }
 }   
 

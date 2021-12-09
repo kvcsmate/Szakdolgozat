@@ -69,7 +69,7 @@ globals.map.UpdateWaterDistances = function () {
   let starterSet = new Set();
   globals.map.cells.forEach(element => {
     element.waterDistance = 0;
-    if (element.GetValue () == 0 && element.shallowWater )
+    if (element.GetValue() == 0 && element.shallowWater )
       starterSet.add(...element.GetNeighbors ());
   });
 
