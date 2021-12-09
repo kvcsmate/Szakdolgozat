@@ -98,9 +98,6 @@ var oMousePos = function (evt) {
 
 var stopIncrement = function () {
 	clearInterval(interval);
-	
-	
-
 }
 
 

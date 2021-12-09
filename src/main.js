@@ -3,6 +3,7 @@ import mouse from './mouse.js';
 import map from './map.js';
 import gui from './gui.js'
 import biome from './biome.js';
+import names from './names.js';
 import mapmarkers from './mapmarkers.js';
 
 Main () 
@@ -25,6 +26,11 @@ function InitGlobals () {
   globals.context2 = canvas2.getContext("2d");
   canvas2.width = globals.width - 1;
   canvas2.height = globals.height - 1;
+
+  globals.namesdiv = document.getElementById("labels");
+  globals.namesdiv.width = globals.width - 1;
+  globals.namesdiv.height = globals.height - 1;
+  globals.names.Init();
 
   var mapmarkercanvas = document.getElementById("mapmarkers");
   globals.mapmarkercontext = mapmarkercanvas.getContext("2d");

@@ -271,7 +271,6 @@ function expandRiver(river,cell)
     var cell_lowest = cell;
     var neighbors = [...cell.neighbors];
     var lowest_neighbor = globals.map.cells[neighbors[0]];
-    //console.log(neighbors);
     for (let i = 1;i<neighbors.length;++i) {
         let newcell = globals.map.cells[neighbors[i]];
         if(lowest_neighbor.GetValue ()>newcell.GetValue ()) {
