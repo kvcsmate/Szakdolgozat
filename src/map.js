@@ -56,12 +56,13 @@ globals.map.LocalMaximums = function () {
   return globals.map.localmaximums;
 }
 globals.map.GetLandCells = function() {
-  globals.map.landcells = new Array()
+  this.landcells = new Array();
   globals.map.cells.forEach(cell => {
     if (cell.GetValue()!=0) {
-      landcells.push(cell);
+      this.landcells.push(cell);
     }
   });
+  return this.landcells;
 }
 
 
@@ -159,6 +160,12 @@ globals.map.distance = function (point1, point2) {
   let a = point1[0] - point2[0];
   let b = point1[1] - point2[1];
 
+  return Math.sqrt(a * a + b * b);
+}
+globals.map.CellDistance = function(cell1, cell2) {
+
+  let a = cell1.x - cell2.x;
+  let b = cell1.y - cell2.y;
   return Math.sqrt(a * a + b * b);
 }
 

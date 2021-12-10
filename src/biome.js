@@ -109,7 +109,7 @@ biome.SetTemperatures = function(){
                 precipitation = biome.TEMPERATURE.DRY;
             }
             cell.biome = [precipitation,temperature];
-            
+            biome.drawBiome(cell);
         }
 
     });

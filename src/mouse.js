@@ -98,6 +98,7 @@ var oMousePos = function (evt) {
 
 var stopIncrement = function () {
 	clearInterval(interval);
+	//globals.map.getLandCells();
 }
 
 

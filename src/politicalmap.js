@@ -20,25 +20,24 @@ közelben legyen hegység, építőanyagok és ércek miatt
 */
 PoliticalMap.GenerateCities = function(){
     this.cities = new Array();
-
-    globals.map.landcells.forEach(cell => 
+    globals.map.GetLandCells().forEach(cell => 
     {
         //Egyiptom átlagos hőmérséklet: 22 fok, ez a globális felmelegedés után
         // Finnország átlagos hőmérséklet 5 fok
-        if (cell.temperature<config.MaxTempForCities && cell.temperature>config.minTempForCities)
+        if (cell.temperature<config.maxTempForCities && cell.temperature>config.minTempForCities)
         {
             let hasWater = false;
             let hasWood = false;
-            let neighbors = [...cell.Getneighbors()];
+            let HasNeighboringCity=false;
+            let neighbors = [...cell.GetNeighbors()];
             if (cell.hasWater && !cell.isLake) {
                 hasWater = true;
-                HasNeighboringCity=false;
             }
-                neighbors.forEach(neighborcell =>{
+            neighbors.forEach(neighborcell =>{
                     if (neighborcell.city) {
                         HasNeighboringCity = true;
                     }
-                    if (neighborcell.value==0 || neighborcell.isLake) {
+                    if (neighborcell.GetValue()==0 || neighborcell.isLake) {
                         hasWater = true;
                     }
                     if (neighborcell.biome == biome.BIOMES.FOREST || neighborcell.biome == biome.BIOMES.TAIGA) //esőerdő túl meleg.
@@ -52,7 +51,7 @@ PoliticalMap.GenerateCities = function(){
             {
                 let closeToHill=false;
                 globals.map.LocalMaximums().forEach(top => {
-                    if (globals.map.distance(top,cell)<config.CityDistanceFromHill) {
+                    if (globals.map.CellDistance(top,cell)<config.CityDistanceFromHill) {
                         closeToHill = true;
                     }
                 });
@@ -63,7 +62,7 @@ PoliticalMap.GenerateCities = function(){
                 }
             }
         }    
-    });
+     });
 }
 PoliticalMap.drawCities = function () {
     
