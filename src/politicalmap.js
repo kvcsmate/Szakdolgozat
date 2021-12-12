@@ -19,7 +19,7 @@ közelben legyen hegység, építőanyagok és ércek miatt
 "catan" szabály : ne legyen a közelben másik nagyváros, azaz 4 mezőnyire mondjuk
 */
 PoliticalMap.GenerateCities = function(){
-    this.cities = new Array();
+    this.cities = new Set();
     globals.map.GetLandCells().forEach(cell => 
     {
         //Egyiptom átlagos hőmérséklet: 22 fok, ez a globális felmelegedés után
@@ -29,24 +29,24 @@ PoliticalMap.GenerateCities = function(){
             let hasWater = false;
             let hasWood = false;
             let HasNeighboringCity=false;
-            let neighbors = [...cell.GetNeighbors()];
-            if (cell.hasWater && !cell.isLake) {
+            if (cell.hasWater && cell.GetValue()>0 && !cell.IsLake) {
                 hasWater = true;
             }
+            let neighbors = [...cell.GetNeighbors()];
             neighbors.forEach(neighborcell =>{
                     if (neighborcell.city) {
                         HasNeighboringCity = true;
                     }
-                    if (neighborcell.GetValue()==0 || neighborcell.isLake) {
+                    if (!hasWater && neighborcell.GetValue()==0 || neighborcell.isLake) {
                         hasWater = true;
                     }
-                    if (neighborcell.biome == biome.BIOMES.FOREST || neighborcell.biome == biome.BIOMES.TAIGA) //esőerdő túl meleg.
-                    {
-                        hasWood = true;
-                    }
+                    // if (neighborcell.biome == biome.BIOMES.FOREST || neighborcell.biome == biome.BIOMES.TAIGA) //esőerdő túl meleg.
+                    // {
+                    //     hasWood = true;
+                    // }
                 });
 
-            
+                hasWood=true;
             if (!HasNeighboringCity && hasWater && hasWood) 
             {
                 let closeToHill=false;
@@ -57,7 +57,7 @@ PoliticalMap.GenerateCities = function(){
                 });
                 if (closeToHill) {
                     cell.city = true;
-                    this.cities.push(cell);
+                    this.cities.add(cell);
                     cell.rendercolor("black");
                 }
             }

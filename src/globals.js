@@ -23,7 +23,7 @@ export default {
     map : {},
     PoI : {},
     names : {},
-    Latitude : 50,
+    Latitude : 30,
     mapsize : 0.2,
     dryness : 100000,
 

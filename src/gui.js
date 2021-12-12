@@ -34,7 +34,15 @@ gui.SetButtons = function()
     var drawridges = document.getElementsByName("Ridges")[0];
     var generateCities = document.getElementsByName("generateCities")[0];
     var generateBiomes = document.getElementsByName("generateBiomes")[0];
-        waterColor.onclick = globals.map.redraw;
+        waterColor.onclick = function() {
+            console.log("asd");
+            globals.map.cells.forEach(element => {
+                if (element.hasWater && element.GetValue()>0 && !element.IsLake) {
+                    element.rendercolor("yellow");
+                }
+            });
+        }
+        
     createRiversButton.onclick = function() {
         var rivers = [...watermap.CreateRivers()];
 	    rivers.forEach(element => {

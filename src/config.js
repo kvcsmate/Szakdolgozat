@@ -1,5 +1,5 @@
 export default {
-    minTempForCities : 5,
+    minTempForCities : 0,
     maxTempForCities :20,
     riverLevel :  30,
     Latitude : 50,
