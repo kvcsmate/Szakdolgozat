@@ -8,4 +8,5 @@ export default {
     // folyók hol generálódhatnak, értéke : dryness < distancefromwater
     resolution : 5000,
     CityDistanceFromHill : 10000,
+    PopulationDensity : 75,
 }

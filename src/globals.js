@@ -14,6 +14,7 @@ export default {
     context: null,
     context2: null,
     namesdiv: null,
+    namesbase : null,   
     mapmarkercontext : null,
     guicontext : null,
     circleRadius: 50,

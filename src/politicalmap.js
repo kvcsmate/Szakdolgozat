@@ -34,9 +34,10 @@ PoliticalMap.GenerateCities = function(){
             }
             let neighbors = [...cell.GetNeighbors()];
             neighbors.forEach(neighborcell =>{
-                    if (neighborcell.city) {
-                        HasNeighboringCity = true;
-                    }
+                    // if (neighborcell.city) {
+                    //     HasNeighboringCity = true;
+                    // }
+                    // túl közeli + nem lehet állítani
                     if (!hasWater && neighborcell.GetValue()==0 || neighborcell.isLake) {
                         hasWater = true;
                     }
@@ -44,6 +45,11 @@ PoliticalMap.GenerateCities = function(){
                     // {
                     //     hasWood = true;
                     // }
+                    this.cities.forEach(city => {
+                        if (globals.map.CellDistance(city,cell)<config.PopulationDensity){
+                            HasNeighboringCity =  true;
+                        }
+                    });
                 });
 
                 hasWood=true;
@@ -58,14 +64,23 @@ PoliticalMap.GenerateCities = function(){
                 if (closeToHill) {
                     cell.city = true;
                     this.cities.add(cell);
-                    cell.rendercolor("black");
                 }
             }
         }    
      });
+    PoliticalMap.drawCities();
 }
 PoliticalMap.drawCities = function () {
-    
+    this.cities.forEach(cell => {
+            console.log(globals.namesbase);
+            globals.context.fillStyle = "black";
+            globals.context.fillRect(cell.x,cell.y,10,10);
+            let culture = globals.namesbase.cultures[Math.floor(Math.random() * globals.namesbase.cultures.length)].Names;//[Math.floor(Math.random() * globals.namesbase.length)];
+            let name = culture[Math.floor(Math.random() * culture.length)];
+            console.log(name);
+            globals.names.AddName(cell.x -20 ,cell.y-20,null,name);
+            
+    });
 
 }
 
