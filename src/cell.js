@@ -35,6 +35,7 @@ export default class Cell {
         this.shallowWater = false;
         this.temperature = 0;
         this.city = false;
+        this.countryId = 0;
     }
 
 

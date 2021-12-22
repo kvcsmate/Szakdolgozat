@@ -51,7 +51,7 @@ biome.BIOMECOLORS = {
 [biome.BIOMES.ICESHEET]:"#8b8e40",
 [biome.BIOMES.RAINFOREST]:"#002e00",
 [biome.BIOMES.FOREST]:"#1c6c1d",
-[biome.BIOMES.TAIGA]:"#aebfbe",
+[biome.BIOMES.TAIGA]:"#091a10",
 [biome.BIOMES.SAVANNA]:"#bb944d",
 [biome.BIOMES.STEPPE]:"#72954d",
 [biome.BIOMES.TUNDRA]:"#cdcdd8"
