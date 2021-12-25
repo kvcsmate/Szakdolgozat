@@ -13,24 +13,75 @@
   <canvas id="canvas2" width="1" height="1" ></canvas>
   
   <canvas id="mapmarkers" width="1" height="1"></canvas>
+  <div id="cities" width="1" height="1" ></div>
   <div id="labels" width="1" height="1" ></div>
-  <div id="biomegui">
-    <button name="Small">Kis</button>
-    <button name="Medium">Közepes</button>
-    <button name="Big">Nagy</button>
-    <button name="water">CalculateWaterDistance</button>
-    <button name="generateBiomes"> Generate biomes</button>
-    <button name="waterColor">waterColor</button>
-    <button name="generatenames">Generate Names</button>
-    <button name="CreateRiver"> Generate Rivers</button>
-    <button name="Ridges"> Generate Ridges</button>
-    <button name="generateCities">Generate cities</button>
-    
-    <input type="text" id="latitude" placeholder="Latitude: 23" >
+  <div id="buttons">
+    <button name="MenuButton">Menü</button>
+    <div id="Menu">
+      <button name="ElevationMenuButton">Domborzat</button>
+      <div id="ElevationUI" class="menu">
+        <button name="FlatElevation">Sík</button>
+        <button name="MountainElevation">Lineáris</button>
+        <button name="FalloffElevation">Szinuszos</button>
+        <button name="CreateRiver"> Folyók generálása</button>
+
+      </div>
+      <button name="BiomeMenuButton">Éghajlat</button>
+      <div id="BiomeUI" class="menu">
+        <!-- <button name="Small">Kis</button>
+        <button name="Medium">Közepes</button>
+        <button name="Big">Nagy</button> -->
+        <button name="water">Éghajlat generálása</button>
+        <div style="background-color: whitesmoke;"> Manuális Éghajlat változtatás:
+        <div class="biome"><div class='box' id="Rainforest" style="background-color: #002e00;"></div><button name="RainforestButton">Esőerdő</button></div>
+        <div class="biome"><div class='box' id="Savanna" style="background-color: #bb944d;"></div><button name="SavannaButton">Szavanna</button></div>
+        <div class="biome"><div class='box' id="Desert" style="background-color: #cec798;"></div><button name="DesertButton">Sivatag</button></div>
+        <div class="biome"><div class='box' id="Steppe" style="background-color: #1c6c1d;"></div><button name="ForestButton">Erdő</button></div>
+        <div class="biome"><div class='box' id="Colddesert" style="background-color: #72954d;"></div><button name="SteppeButton">Sztyeppe</button></div>
+        <div class="biome"><div class='box' id="Rainforest" style="background-color: #9b998a;"></div><button name="ColddesertButton">Hideg sivatag</button></div>
+        <div class="biome"><div class='box' id="Taiga" style="background-color: #091a10;"></div><button name="TaigaButton">Tajga</button></div>
+        <div class="biome"><div class='box' id="Tundra" style="background-color: #a4a4db;"></div><button name="TundraButton">Tundra</button></div>
+        <div class="biome"><div class='box' id="Icesheet" style="background-color: white;"></div><button name="IcesheetButton">Hómező</button></div>
+        <!-- <button name="waterColor">waterColor</button> -->
+        </div>
+      </div>
+      <button name="PoliticalMenuButton">Országok</button>
+    <div id="PoliticalUI" class="menu">
+      <button name="generateCities" >Városok generálása</button>
+      <button name="AddCityButton" >Város hozzáadás</button><br>
+      <button name="GenerateCountriesButton"> Ország generálás </button>
+    </div> 
+      <button name="SettingsMenuButton">Beállítások</button>
+      <div id="SettingsUI" style="background-color: whitesmoke; border: 5px solid whitesmoke;" class="menu">
+        <h2>Domborzat</h2>
+        <input type="number" id="RiverLevel"  >Folyó megjelenítési magasság </input>
+        <input type="number" id="ElevationSpeed"  > Domborzati ecset ereje </input>
+        <h2> Éghajlat</h2>
+         <input type="number" id="Latitude" placeholder="50" >Szélességi fok </input>
+         <h2>Város generálás</h2>
+         <input type="number" id="minTempForCities" placeholder="0" >Minimum hőmérséklet </input>
+         <input type="number" id="maxTempForCities" placeholder="20" >Maximum hőmérséklet </input>
+         <input type="number" id="CityDistanceFromHill" placeholder="20" > Város maximum távolsága hegytől </input>
+         <input type="number" id="PopulationDensity" placeholder="20" > Város minimum távolsága várostól </input>
+         <input type="number" id="RealmSize" placeholder="3" > Városok száma országonként </input>
+        <button id="SettingsConfirm">Alkalmazás</button>
+
+      </div> 
+      <button name="ExportMenuButton">Exportálás</button>
+      <div id="ExportUI" class="menu"></div> 
+    </div>
   </div>
+ <div id="townNameInput">
+   <button id="escapebutton">✖</button>
+  <input type="text" id="townName" placeholder="Városnév" ></input> <button id="confirmbutton" name="TownNameConfirmButton">✔</button>
+  <br>
+  <input type="checkbox" id="isCapital">
+  <label for="isCapital">Főváros</label><br>
+  <button id="removeButton">Eltávolítás..</button>
+ </div>
+  <script src="src/htmltocanvas.js"></script>
   <script src="src/voronoi.js"></script>
   <script src="src/main.js" type="module"></script>
-
 </body>
 
 </html>

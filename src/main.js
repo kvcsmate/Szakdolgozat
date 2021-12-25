@@ -24,20 +24,10 @@ function InitGlobals () {
      return response.json();
   })
   .then(asd => console.log(asd));
-  //globals.namesbase = require('./src/Fantasy_NameBase.json');
-  console.log(globals.namesbase);
-  // loadJSON(function(response) {
-  //   // Parse JSON string into object
-  //     globals.namesbase = JSON.parse(response);
-  //     console.log(globals.namesbase.cultures[0].Names[2]);
-     
-      
-  //  });
-  //console.log(globals.namesbase.cultures[0].Names[2]);
-  //globals.namesbase = fetch('./src/Fantasy_NameBase.json')
+  
   request();
-  //console.log(json);
-  console.log(globals.namesbase)
+  globals.cities = new Set();
+  globals.capitals = new Set();
   globals.width = window.innerWidth;
   globals.height = window.innerHeight;
   globals.canvas = document.getElementById("canvas");
@@ -55,11 +45,15 @@ function InitGlobals () {
   globals.namesdiv.height = globals.height - 1;
   globals.names.Init();
 
+  globals.citiesdiv = document.getElementById("cities");
+  globals.citiesdiv.width = globals.width - 1;
+  globals.citiesdiv.height = globals.height - 1;
+
   var mapmarkercanvas = document.getElementById("mapmarkers");
   globals.mapmarkercontext = mapmarkercanvas.getContext("2d");
   mapmarkercanvas.width = globals.width - 1;
   mapmarkercanvas.height = globals.height - 1;
-  mapmarkers.DrawLatitude();
+  //mapmarkers.DrawLatitude();
 
   var buttons = document.getElementsByTagName('button');
   for (let i = 0; i < buttons.length; i++) {
@@ -67,6 +61,13 @@ function InitGlobals () {
     gui.buttonInit(button);
 
 }
+  var divs = document.getElementsByTagName('div');
+  for (let i = 0; i < divs.length; i++) {
+    let div = divs[i];
+    gui.buttonInit(div);
+
+}
+gui.SetDivs();
 gui.SetButtons();
   /*var gui = document.getElementById("gui");
   globals.guicontext = canvas.getContext("2d");

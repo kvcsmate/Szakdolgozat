@@ -1,7 +1,6 @@
 import globals from './globals.js';
 import gradient from './gradient.js';
-import biome from './biome.js';
-
+import enums from './enums.js';
 
 function IsNear (a ,b) {
     return Math.abs(a - b) < globals.epsilon;
@@ -24,21 +23,21 @@ export default class Cell {
         this.x = point[0];
         this.y = point[1];
         this.#value = value;
-        this.isOnBorder = IsonBorder(this);
+        //this.isOnBorder = IsonBorder(this);
         this.isLocalMax = true;
         this.neighbors =[...globals.voronoi.neighbors(this.id)];
         this.isLake = false;
         this.latitude = 0;
-        this.biome = biome.BIOMES.FOREST;
+        this.biome = enums.BIOMES.FOREST;
         this.hasWater = true;
         this.waterDistance = 0;
         this.shallowWater = false;
         this.temperature = 0;
         this.city = false;
+        this.cityId = 0;
         this.countryId = 0;
+        this.naturalBorder = false;
     }
-
-
     SetValue (number) {
         globals.map.cellsToUpdateWaterdistance.add(this.id);
         this.#value = Math.max (Math.min (number,255),0);
@@ -97,6 +96,18 @@ export default class Cell {
         }
         return gradient[colorindex][0];
     }
+
+    renderBiome ()
+    {
+    let color = enums.BIOMECOLORS[this.biome];
+            
+    globals.context.fillStyle = color;
+    globals.context.lineJoin = 'bevel';
+    globals.context.beginPath();
+    globals.voronoi.renderCell(this.id, globals.context)
+    globals.context.fill();
+    }
+
 
 
     heightColor() {

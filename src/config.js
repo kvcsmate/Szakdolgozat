@@ -1,12 +1,13 @@
 export default {
-    minTempForCities : 0,
-    maxTempForCities :20,
-    riverLevel :  30,
+    riverLevel :  500000000,
+    ELevationSpeed :2,
     Latitude : 50,
-    mapsize : 0.2,
-    dryness : 100000,
-    // folyók hol generálódhatnak, értéke : dryness < distancefromwater
-    resolution : 5000,
+    MinTempForCities : 0,
+    MaxTempForCities :20,
     CityDistanceFromHill : 10000,
     PopulationDensity : 75,
+    // folyók hol generálódhatnak, értéke : dryness < distancefromwater
+    Resolution : 5000,
+    RealmSize:3,
+    NameCulture : 1,
 }

@@ -1,4 +1,6 @@
+import config from './config.js';
 import globals from './globals.js';
+import PoliticalMap from './politicalmap.js';
 import water from './watermap.js';
 
 var mouse = {};
@@ -31,10 +33,118 @@ var mouseDown = function (e) {
 
 
 var handleMouseDown = function () {
-
-	if(globals.iselElevatingActive)
+	if (globals.iselElevatingActive) 
 	{
-		var rsquare = Math.pow(globals.circleRadius,2);
+		switch (globals.menu) {
+			case 1:
+				ElevationSwitcher();
+				break;
+			case 2:
+				BiomeSwitcher();
+				break;
+			case 3:
+				PoliticalSwitcher();
+				break;
+			default:
+				break;
+		}
+	}
+	
+		// if (lastPressedMouseButton == MOUSEKEY.MIDDLE) {
+		// 	globals.map.cells.forEach(cell => {
+		// 		let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
+				
+		// 		if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
+		// 			console.log(cell);
+		// 		}
+		// 	})
+		// }
+	
+}
+var ElevationSwitcher = function ()
+{
+		globals.riversGenerated = false;
+		switch (globals.Elevationtype) {
+			case 1:
+				FlatElevation();
+				break;
+			case 2:
+				MountainElevation();
+				break;
+			case 3 :
+				FalloffElevation();
+				break;	
+			default:
+				break;
+		}
+	
+	
+}
+var PoliticalSwitcher = function () {
+	switch (globals.Politicaltype) {
+		case 1: AddCity();
+			
+			break;
+	
+		default:
+			break;
+	}
+}
+var AddCity = function () {
+		if (lastPressedMouseButton == MOUSEKEY.LEFT) {
+			globals.map.GetLandCells().forEach(cell => {
+				if (cell.contains(globals.mouseX,globals.mouseY) && !cell.city) {
+					PoliticalMap.addCity(cell);
+				}
+			});
+		}
+}
+var BiomeSwitcher = function ()
+{
+	if (lastPressedMouseButton == MOUSEKEY.LEFT) {
+		globals.map.cells.forEach(cell => {
+			let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
+			if (distanceFromMouse < Math.pow(globals.circleRadius,2) && cell.GetValue()>0) {
+				cell.biome = globals.Biometype;
+				cell.temperature = globals.Biometype[1];
+				console.log(cell.temperature);
+				cell.renderBiome();
+			};
+		})
+	} 
+}
+
+var FlatElevation = function ()
+{
+	
+	var rsquare = Math.pow(globals.circleRadius,2);
+		if (lastPressedMouseButton == MOUSEKEY.LEFT) {
+			globals.map.cells.forEach(cell => {
+				let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
+				if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
+					cell.isLake = false;
+					cell.hasWater = false;
+					cell.SetValue (Math.min(cell.GetValue () + config.ELevationSpeed + (Math.random()-0.5)*0.3, 255))
+					//cell.isLocalMax=true;
+					cell.render();
+				};
+			})
+		} else if (lastPressedMouseButton == MOUSEKEY.RIGHT) {
+			globals.map.cells.forEach(cell => {
+				let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
+				if (distanceFromMouse < rsquare) {
+					cell.isLake = false;
+					cell.SetValue (Math.max(cell.GetValue () - config.ELevationSpeed, 0))
+					cell.hasWater = (cell.GetValue () == 0);
+					cell.render();
+				};
+			})
+		}
+}
+
+var MountainElevation = function ()
+{
+	var rsquare = Math.pow(globals.circleRadius,2);
 		if (lastPressedMouseButton == MOUSEKEY.LEFT) {
 			globals.map.cells.forEach(cell => {
 				let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
@@ -42,7 +152,8 @@ var handleMouseDown = function () {
 				if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
 					cell.isLake = false;
 					cell.hasWater = false;
-					cell.SetValue (Math.min(cell.GetValue () + 5-(distanceFromMouse/rsquare)*5+ 2*Math.random(), 255))
+					let ratio = Math.sqrt(distanceFromMouse)/globals.circleRadius;
+					cell.SetValue (Math.min(cell.GetValue () + config.ELevationSpeed*(1-ratio)+ (Math.random()-0.5)*0.3, 255))
 					cell.isLocalMax=true;
 					cell.render();
 				};
@@ -52,25 +163,43 @@ var handleMouseDown = function () {
 				let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
 				if (distanceFromMouse < rsquare) {
 					cell.isLake = false;
-					cell.SetValue (Math.max(cell.GetValue () - 2 - 2+(distanceFromMouse/rsquare)*2, 0))
+					let ratio = Math.sqrt(distanceFromMouse)/globals.circleRadius;
+					cell.SetValue (Math.max(cell.GetValue () -(1-ratio)*config.ELevationSpeed/2, 0))
 					cell.hasWater = (cell.GetValue () == 0);
 					cell.render();
 				};
 			})
 		}
-		if (lastPressedMouseButton == MOUSEKEY.MIDDLE) {
+}
+var FalloffElevation = function ()
+{	
+	var rsquare = Math.pow(globals.circleRadius,2);
+		if (lastPressedMouseButton == MOUSEKEY.LEFT) {
 			globals.map.cells.forEach(cell => {
 				let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
 				
-				if (distanceFromMouse < Math.pow(globals.circleRadius,2)) {
-					console.log(cell);
-				}
+				if (distanceFromMouse <rsquare) {
+					cell.isLake = false;
+					cell.hasWater = false;
+					let ratio = Math.sqrt(distanceFromMouse)/globals.circleRadius;
+					cell.SetValue (Math.min(cell.GetValue () +config.ELevationSpeed*(Math.cos(ratio*Math.PI)+1) + (Math.random()-0.5)*0.3, 255))
+					cell.isLocalMax=true;
+					cell.render();
+				};
+			})
+		} else if (lastPressedMouseButton == MOUSEKEY.RIGHT) {
+			globals.map.cells.forEach(cell => {
+				let distanceFromMouse = Math.pow(cell.x - globals.mouseX,2) + Math.pow(cell.y - globals.mouseY,2);
+				if (distanceFromMouse < rsquare) {
+					cell.isLake = false;
+					let ratio = Math.sqrt(distanceFromMouse)/globals.circleRadius;
+					cell.SetValue (Math.max(cell.GetValue () - config.ELevationSpeed*(Math.cos(ratio/Math.PI)+1), 0))
+					cell.hasWater = (cell.GetValue () == 0);
+					cell.render();
+				};
 			})
 		}
-	}
 }
-
-
 var redrawCircle = function (evt) {
 	let offset = 2 * globals.circleRadius + 2;
 	let size = 4 * globals.circleRadius;
@@ -98,7 +227,7 @@ var oMousePos = function (evt) {
 
 var stopIncrement = function () {
 	clearInterval(interval);
-	//globals.map.getLandCells();
+	
 }
 
 

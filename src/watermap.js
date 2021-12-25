@@ -1,9 +1,18 @@
 import globals from './globals.js';
 import River from './river.js';
+import config from './config.js';
 let counter = 0;
 var underlevel = false;
 var water = {}; 
 
+water.GenerateRivers = function () {
+        globals.riversGenerated = true;
+        var rivers = [...water.CreateRivers()];
+	    rivers.forEach(element => {
+		water.drawCurve(globals.context,element.curve);
+	});
+    water.DrawShallowWater();
+}
 
 water.DrawShallowWater = function()
 {
@@ -39,21 +48,23 @@ water.CreateRivers = function()
 {
     var rivers = [];
     var tops = [...globals.map.LocalMaximums()];
-    
+    globals.map.GetLandCells().forEach(cell => {
+        cell.hasWater=false;
+        cell.isLake = false;
+    });
     tops.forEach(hilltop => {
-        if(hilltop.distancefromwater < globals.dryness)
-        {
-           // ide majd az alsót
-        }
-        var river = new River();
-        counter = 0;
-        underlevel = false;
-        //expandRiver(river,hilltop);
-        expandRiverNoRecursion(hilltop,river);
-        if(river.points.length>5)
-        {
-            rivers.push(river);
-        }
+       
+                var river = new River();
+            counter = 0;
+            underlevel = false;
+            //expandRiver(river,hilltop);
+            expandRiverNoRecursion(hilltop,river);
+            if(river.points.length>5)
+            {
+                rivers.push(river);
+            }
+        
+       
     });
     return rivers;
 }
@@ -241,8 +252,10 @@ function expandRiverNoRecursion(starterCell,river)
             
             
         // }
-        river.addPoint(lowest_neighbor.x,lowest_neighbor.y,lowest_neighbor.GetValue())
-        river.addCurvePoints(lowest_neighbor.x,lowest_neighbor.y)
+        if (config.riverLevel > lowest_neighbor.GetValue()) {
+            river.addPoint(lowest_neighbor.x,lowest_neighbor.y,lowest_neighbor.GetValue())
+            river.addCurvePoints(lowest_neighbor.x,lowest_neighbor.y)
+        }
 
         let oldneighbors = [...neighbors];
         cell_lowest = lowest_neighbor;

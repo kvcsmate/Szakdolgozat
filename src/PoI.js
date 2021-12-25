@@ -18,9 +18,9 @@ globals.PoI.Init = function () {
 globals.PoI.GetRidges = function () {
     globals.PoI.ridges = new Array();
     globals.PoI.mountainTops.forEach(top0 => {
-        top0.rendercolor("lime");
+        //top0.rendercolor("lime");
         globals.PoI.mountainTops.forEach(top1 => {
-            top1.rendercolor("lime");
+            //top1.rendercolor("lime");
             let topdistance = getDistance(top0.x,top0.y,top1.x,top1.y); 
             if (topdistance<50) {
                 let ridge = new Array();
@@ -40,7 +40,8 @@ globals.PoI.GetRidges = function () {
                     neighbors = [...closestcell.GetNeighbors()];
                     neighbors = neighbors.filter(neighbor => !oldneighbors.includes(neighbor));
                     ridge.push(closestcell);
-                    closestcell.rendercolor("purple");
+                    ridge.naturalBorder = true;
+                    //closestcell.rendercolor("purple");
                 }
                     // while nem 0 a getdistance. egy set-be berakni a szomszédokat, aztán kiválasztani a
                     //legközelebbi szomszédot, törölni a set-et és berakni az új szomszédokat.

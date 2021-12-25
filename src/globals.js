@@ -1,3 +1,5 @@
+import enums from "./enums.js";
+
 export default {
     width: null,
     height: null,
@@ -14,6 +16,7 @@ export default {
     context: null,
     context2: null,
     namesdiv: null,
+    citiesdiv:null,
     namesbase : null,   
     mapmarkercontext : null,
     guicontext : null,
@@ -26,7 +29,20 @@ export default {
     names : {},
     Latitude : 30,
     mapsize : 0.2,
-    dryness : 100000,
-
-    // folyók hol generálódhatnak, értéke : dryness < distancefromwater
+    dryness : 10,
+    Elevationtype : enums.ELEVATIONTYPE.MOUNTAIN,
+    menu : enums.MENU.ELEVATION,
+    Biometype: enums.BIOMES.FOREST,
+    Politicaltype : enums.POLITICALTYPE.ADDCITY,
+    riversGenerated : false,
+    biomesGenerated : false,
+    TownsGenerated : false,
+    CountriesGenerated : false,
+    NameChangeId:0,
+    NameChanger :null,
+    cities:null,
+    capitals:null,
+    cityDivs : {},
+    cityId :1,
+    
 }
